@@ -37,3 +37,6 @@ jobs:
 
       - name: Run Tests
         run: deno test -A --unstable
+        
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
