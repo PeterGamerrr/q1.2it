@@ -1,0 +1,19 @@
+{
+  "name": "q1.2it",
+  "version": "0.1.0",
+  "description": "projectitthegame",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PeterGamerrr/q1.2it.git"
+  },
+  "author": "Peter van Assenbergh; Nina van Dijk; Tom de Boer; Emma Dokter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PeterGamerrr/q1.2it/issues"
+  },
+  "homepage": "https://github.com/PeterGamerrr/q1.2it#readme"
+}
