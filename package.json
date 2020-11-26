@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/PeterGamerrr/q1.2it/issues"
   },
-  "homepage": "https://github.com/PeterGamerrr/q1.2it#readme"
+  "homepage": "https://github.com/PeterGamerrr/q1.2it#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
 }
