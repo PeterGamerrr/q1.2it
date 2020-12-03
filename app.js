@@ -1,7 +1,9 @@
-var express = require('express');
-var logger = require('morgan');
-var path = require('path');
-var app = express();
+const express = require('express');
+const logger = require('morgan');
+const path = require('path');
+const fs = require('fs')
+const https = require('https')
+const app = express();
 
 // log requests
 app.use(logger('dev'));
@@ -32,9 +34,9 @@ app.use(express.static(path.join(__dirname, 'public', 'css')));
 https
   .createServer(
     {
-      key: fs.readFileSync('/etc/letsencrypt/path/to/key.pem'),
-      cert: fs.readFileSync('/etc/letsencrypt/path/to/cert.pem'),
-      ca: fs.readFileSync('/etc/letsencrypt/path/to/chain.pem'),
+      key: fs.readFileSync('/etc/letsencrypt/live/colomb.nl/privkey.pem'),
+      cert: fs.readFileSync('/etc/letsencrypt/live/colomb.nl/cert.pem'),
+      ca: fs.readFileSync('/etc/letsencrypt/live/colomb.nl/chain.pem'),
     },
     app
   )
