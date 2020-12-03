@@ -1,7 +1,3 @@
-/**
- * Module dependencies.
- */
-
 var express = require('express');
 var logger = require('morgan');
 var path = require('path');
@@ -33,6 +29,15 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 // this will allow "GET /style.css" instead of "GET /css/style.css":
 app.use(express.static(path.join(__dirname, 'public', 'css')));
 
-app.listen(80);
-
-//CREDIT: express.js docs
+https
+  .createServer(
+    {
+      key: fs.readFileSync('/etc/letsencrypt/path/to/key.pem'),
+      cert: fs.readFileSync('/etc/letsencrypt/path/to/cert.pem'),
+      ca: fs.readFileSync('/etc/letsencrypt/path/to/chain.pem'),
+    },
+    app
+  )
+  .listen(443, () => {
+    console.log('Listening...')
+  })
