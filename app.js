@@ -33,7 +33,7 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 // this will allow "GET /style.css" instead of "GET /css/style.css":
 app.use(express.static(path.join(__dirname, 'public', 'css')));
 
-app.listen(3000);
+app.listen(80);
 
 //CREDIT: express.js docs
 
