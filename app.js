@@ -3,33 +3,33 @@ const logger = require('morgan');
 const path = require('path');
 const fs = require('fs')
 const https = require('https')
+const http = require('http')
 const app = express();
 
 // log requests
 app.use(logger('dev'));
 
-// express on its own has no notion
-// of a "file". The express.static()
-// middleware checks for a file matching
-// the `req.path` within the directory
-// that you pass it. In this case "GET /js/app.js"
-// will look for "./public/js/app.js".
 
+//send http to https
+app.use ((req, res, next) => {
+  if (req.secure) {
+    // request was via https, so do no special handling
+    next();
+  } else {
+    // request was via http, so redirect to https
+    res.redirect('https://' + req.headers.host + req.url);
+  }
+});
+
+//shares the folder public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// if you wanted to "prefix" you may use
-// the mounting feature of Connect, for example
-// "GET /static/js/app.js" instead of "GET /js/app.js".
-// The mount-path "/static" is simply removed before
-// passing control to the express.static() middleware,
-// thus it serves the file correctly by ignoring "/static"
-app.use('/static', express.static(path.join(__dirname, 'public')));
-
-// if for some reason you want to serve files from
-// several directories, you can use express.static()
-// multiple times! Here we're passing "./public/css",
-// this will allow "GET /style.css" instead of "GET /css/style.css":
+//checks for css files in css folder
 app.use(express.static(path.join(__dirname, 'public', 'css')));
+
+http.createServer(app).listen(80, () => {
+  console.log('Listening... on port 80')
+})
 
 https
   .createServer(
@@ -41,5 +41,5 @@ https
     app
   )
   .listen(443, () => {
-    console.log('Listening...')
+    console.log('Listening... on port 443')
   })

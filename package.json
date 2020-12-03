@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bootup": "node app.js",
-    "dev": "nodemon app.js"
+    "bootup": "sudo node app.js",
+    "dev": "sudo nodemon app.js"
   },
   "repository": {
     "type": "git",
