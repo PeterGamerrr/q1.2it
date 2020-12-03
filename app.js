@@ -1,41 +1,39 @@
-var createError = require('http-errors');
+/**
+ * Module dependencies.
+ */
+
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
+var path = require('path');
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
+// log requests
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+// express on its own has no notion
+// of a "file". The express.static()
+// middleware checks for a file matching
+// the `req.path` within the directory
+// that you pass it. In this case "GET /js/app.js"
+// will look for "./public/js/app.js".
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// if you wanted to "prefix" you may use
+// the mounting feature of Connect, for example
+// "GET /static/js/app.js" instead of "GET /js/app.js".
+// The mount-path "/static" is simply removed before
+// passing control to the express.static() middleware,
+// thus it serves the file correctly by ignoring "/static"
+app.use('/static', express.static(path.join(__dirname, 'public')));
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+// if for some reason you want to serve files from
+// several directories, you can use express.static()
+// multiple times! Here we're passing "./public/css",
+// this will allow "GET /style.css" instead of "GET /css/style.css":
+app.use(express.static(path.join(__dirname, 'public', 'css')));
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.listen(3000);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+//CREDIT: express.js docs
 
-module.exports = app;
