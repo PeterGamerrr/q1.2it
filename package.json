@@ -1,27 +1,16 @@
 {
   "name": "q1.2it",
-  "version": "0.1.0",
-  "description": "projectitthegame",
-  "main": "app.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "bootup": "node app.js",
-    "dev": "nodemon app.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PeterGamerrr/q1.2it.git"
-  },
-  "author": "Peter van Assenbergh; Nina van Dijk; Tom de Boer; Emma Dokter",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/PeterGamerrr/q1.2it/issues"
-  },
-  "homepage": "https://github.com/PeterGamerrr/q1.2it#readme",
-  "devDependencies": {
-    "nodemon": "^2.0.6"
+    "start": "node ./bin/www"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1"
   }
 }
