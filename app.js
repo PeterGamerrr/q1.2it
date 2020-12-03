@@ -15,6 +15,7 @@ app.use ((req, res, next) => {
   if (req.secure) {
     next();
   } else {
+    console.log("someone used http")
     res.redirect('https://' + req.headers.host + req.url);
   }
 });
