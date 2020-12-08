@@ -11,7 +11,7 @@ class cell{
     }
 
     
-    public get x() : number {
+    public get getX() : number {
         return this.x;
     }
     
