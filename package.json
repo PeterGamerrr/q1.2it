@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bootup": "sudo node app.js",
-    "dev": "sudo nodemon app.js"
+    "bootup": "sudo node app.js 2>&1 | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ~/project/server.log",
+    "dev": "sudo nodemon app.js 2>&1 | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ~/project/devserver.log"
   },
   "repository": {
     "type": "git",
