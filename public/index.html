@@ -1,21 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colomb</title>
-    <style>
-
-    </style>
-    <script>
+<html>
+    <head>
         
-    </script>
-</head>
-<body>
-    <h1>PlayerImages</h1>
-    <img src="playericons/spelerconcept1.png" alt="player1">
-    <img src="playericons/spelerconcept2.png" alt="player2">
-    <img src="playericons/spelerconcept3.png" alt="player3">
-    <img src="playericons/spelerconcept4.png" alt="player4">
-</body>
+      <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	    <link href="css/bootstrap-grid.min.css" rel="stylesheet" type="text/css">
+	    <link href="css/bootstrap-reboot.min.css" rel="stylesheet" type="text/css">
+       
+      <link rel="stylesheet" href="css/main.css">
+      <script src="script.js"></script>
+      <meta charset="utf-8" /> 
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <title>Colomb</title>
+    </head>
+
+    <body>
+    <main>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h1 class="header">Colomb</h1>
+          </div>
+        </div>
+
+        <div class="row players">
+          <div class="col-12">
+            <h2 class="title">Spelers</h2>
+          </div>
+          <div class="col-4">
+            <button>2 spelers</button>
+          </div>
+          <div class="col-4">
+            <button>3 spelers</button>
+          </div>
+          <div class="col-4">
+            <button>4 spelers</button>
+          </div>
+        </div>
+
+        <div class="row size">
+          <div class="col-12">
+            <h2 class="title">Size</h2>
+          </div>
+          <div class="col-4">
+            <button>Klein</button>
+          </div>
+          <div class="col-4">
+            <button>Medium</button>
+          </div>
+          <div class="col-4">
+            <button>Groot</button>
+          </div>
+        </div>
+
+        <div class="row level">
+          <div class="col-12">
+            <h2 class="title">Moeilijkheid</h2>
+          </div>
+          <div class="col-4">
+            <button>Makkelijk</button>
+          </div>
+          <div class="col-4">
+            <button>Moeilijk</button>
+          </div>
+          <div class="col-4">
+            <button>Extreem</button>
+          </div>
+        </div>
+
+        <div class="row d-flex justify-content-center">
+          <div class="col-4 start-btn-container">
+            <button class="start-btn">Start spel</button>
+          </div>
+        </div>
+        
+      </div>
+    </main>
+      <div class="fluid-container bg-image"></div>
+    </body>
+
 </html>
