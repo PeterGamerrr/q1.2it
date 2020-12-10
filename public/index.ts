@@ -1,11 +1,4 @@
 class cell{
-    private static colors = [
-        [255,255,255],
-        [255,255,255],
-        [255,255,255],
-        [255,255,255],
-        [255,255,255]
-    ]
     private x: number;
     private y: number;
     private bomb: boolean;
