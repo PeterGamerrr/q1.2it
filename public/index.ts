@@ -27,10 +27,10 @@ boardSize = 2 * playerCount + 3;
 bombs = boardSize * boardSize * (menuDifficulty * 0.05 + 0.1);
 
 //board init
-
-
+$('main').empty();
 
 //game
+
 
 //board
 
