@@ -1,10 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Roboto&display=swap');
+
+// static variables
 @import 'colors';
+
+:root {
+    // non-static variables
+    --boardsize: 5;
+}
 
 body{
     font-size: 14px;
     font-family: 'Roboto';
 }
+
 main{
     h1,h2,h3{
         font-family: 'Permanent Marker';
@@ -58,6 +66,19 @@ main{
     }
     .fourthPlayer {
         color: $fourthPlayerColor;
+    }
+
+    .gameboard {
+        display: grid;
+        grid-template-columns: repeat(var(--boardsize), 1fr);
+        grid-template-rows: repeat(var(--boardsize), 1fr);
+        grid-gap: 0.5rem;
+        max-width: calc(500px + 2rem);
+
+        .cell {
+            background: $black-70
+        
+        }
     }
 
 }

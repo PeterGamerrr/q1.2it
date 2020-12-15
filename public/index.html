@@ -5,7 +5,6 @@
         <link href="bootstrap-reboot.min.css" rel="stylesheet" type="text/css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="main.css">
-        <script src="script.js"></script>
         <meta charset="utf-8" />         
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <title>Colomb</title>
@@ -26,13 +25,13 @@
             <h2 class="title">Spelers</h2>
           </div>
           <div class="col-4">
-            <button>2 spelers</button>
+            <button onclick="setMenuPlayerCount(2)">2 spelers</button>
           </div>
           <div class="col-4">
-            <button>3 spelers</button>
+            <button onclick="setMenuPlayerCount(3)">3 spelers</button>
           </div>
           <div class="col-4">
-            <button>4 spelers</button>
+            <button onclick="setMenuPlayerCount(4)">4 spelers</button>
           </div>
         </div>
 
@@ -41,13 +40,13 @@
             <h2 class="title">Size</h2>
           </div>
           <div class="col-4">
-            <button>Klein</button>
+            <button onclick="setMenuBoardSize(0)">Klein</button>
           </div>
           <div class="col-4">
-            <button>Medium</button>
+            <button onclick="setMenuBoardSize(1)"">Medium</button>
           </div>
           <div class="col-4">
-            <button>Groot</button>
+            <button onclick="setMenuBoardSize(2)">Groot</button>
           </div>
         </div>
 
@@ -56,19 +55,19 @@
             <h2 class="title">Moeilijkheid</h2>
           </div>
           <div class="col-4">
-            <button>Makkelijk</button>
+            <button onclick="setDifficulty(0)">Makkelijk</button>
           </div>
           <div class="col-4">
-            <button>Moeilijk</button>
+            <button onclick="setDifficulty(1)">Moeilijk</button>
           </div>
           <div class="col-4">
-            <button>Extreem</button>
+            <button onclick="setDifficulty(2)">Extreem</button>
           </div>
         </div>
 
         <div class="row d-flex justify-content-center">
           <div class="col-4 start-btn-container">
-            <button class="start-btn">Start spel</button>
+            <button class="start-btn" onclick="startGame()">Start spel</button>
           </div>
         </div>
         
