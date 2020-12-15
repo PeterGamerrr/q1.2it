@@ -1,4 +1,11 @@
 //board game cell
+let root = document.documentElement;
+let playerCount = 2;
+let menuBoardSize = 0;
+let boardSize:number
+let bombs:number;
+let menuDifficulty = 0;
+
 class cell{ 
     private x: number;
     private y: number;
@@ -30,35 +37,24 @@ class cell{
     
 }
 
-//menu + init
-let boardSize:number, bombs:number;
-
+//menu
 //players
-let playerCount = 2;
 function setMenuPlayerCount(num:number):void {
     playerCount = num;
     console.log(num);
 }
 
 //size
-let menuBoardSize = 0;
 function setMenuBoardSize(num:number):void {
     menuBoardSize = num;
     console.log(num);
 }
 
 //difficulty
-// 0: easy
-// 1: hard
-// 2: insane
-let menuDifficulty = 0;
 function setDifficulty(num:number):void {
     menuDifficulty = num;
     console.log(num);
 }
-
-
-//actual numbers
 
 //board init
 function startGame():void {
@@ -72,7 +68,6 @@ function startGame():void {
     $("main").load("gameboard.html", () => {
         let gameBoard = $(".gameboard");
         console.log(gameBoard);
-        let root = document.documentElement;
         root.style.setProperty("--boardsize",boardSize + "");
         for (let i = 0; i < boardSize; i++) {
             for (let j = 0; j < boardSize; j++) {
