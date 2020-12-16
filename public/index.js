@@ -1,68 +1,118 @@
 //board game cell
-let root = document.documentElement;
-let playerCount = 2;
-let menuBoardSize = 0;
-let boardSize;
-let bombs;
-let menuDifficulty = 0;
-let board;
-let playerTurn = 1;
-class cell {
-    constructor(x, y) {
+var root = document.documentElement;
+var playerCount = 2;
+var menuBoardSize = 0;
+var boardSize;
+var bombs;
+var menuDifficulty = 0;
+var board;
+var playerTurn = 1;
+var Cell = /** @class */ (function () {
+    function Cell(x, y, claimable) {
         this._bomb = false;
         this._claimedBy = 0;
+        this._claimable = true;
         this._x = x;
         this._y = y;
-    }
-    get x() {
-        return this._x;
-    }
-    get y() {
-        return this._y;
-    }
-    set bomb(value) {
-        this._bomb;
-    }
-    get bomb() {
-        return this._bomb;
-    }
-    move(x, y) {
-        if (this._claimedBy === 0) {
+        if (claimable != undefined) {
+            this._claimable = claimable;
         }
     }
-    explode(x, y) {
+    Object.defineProperty(Cell.prototype, "x", {
+        get: function () {
+            return this._x;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Cell.prototype, "y", {
+        get: function () {
+            return this._y;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Cell.prototype, "bomb", {
+        get: function () {
+            return this._bomb;
+        },
+        set: function (value) {
+            this._bomb;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Cell.prototype, "claimedBy", {
+        get: function () {
+            return this._claimedBy;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Cell.prototype, "claimable", {
+        get: function () {
+            return this._claimable;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Cell.prototype.move = function () {
+        if (this.claimedBy === 0 &&
+            this.claimable === true &&
+            (getBoard(this.y - 1, this.x).claimedBy === playerTurn ||
+                getBoard(this.y + 1, this.x).claimedBy === playerTurn ||
+                getBoard(this.y, this.x - 1).claimedBy === playerTurn ||
+                getBoard(this.y, this.x + 1).claimedBy === playerTurn)) {
+        }
+    };
+    Cell.prototype.explode = function (x, y) {
         //TODO: make explosion
-    }
-    get element() {
-        console.log(".fieldcolumn-" + this._y + " .fieldrow-" + this._x);
-        return $(".fieldcolumn-" + this._y + ".fieldrow-" + this._x);
-    }
-}
+    };
+    Object.defineProperty(Cell.prototype, "element", {
+        get: function () {
+            return $(".cell[x='" + this.x + "'][y='" + this.y + "']");
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Cell;
+}());
 //board init
 function startGame() {
     boardSize = playerCount + menuBoardSize + 3;
     bombs = boardSize * boardSize * (menuDifficulty * 0.05 + 0.1);
-    console.log("startup: " + bombs + " " + boardSize);
+    // console.log("startup: " + bombs + " " + boardSize)
     $("main").empty();
-    console.log("start");
-    $("main").load("gameboard.html", () => {
-        let gameBoard = $(".gameboard");
-        console.log(gameBoard);
+    $("main").load("gameboard.html", function () {
+        var gameBoard = $(".gameboard");
         root.style.setProperty("--boardsize", boardSize + "");
         board = [];
-        for (let i = 0; i < boardSize; i++) {
+        for (var i = 0; i < boardSize; i++) {
             board[i] = [];
-            for (let j = 0; j < boardSize; j++) {
-                board[i][j] = new cell(i, j);
-                let column = document.createElement("div");
-                column.classList.add("cell");
-                column.classList.add("fieldcolumn-" + j);
-                column.classList.add("fieldrow-" + i);
-                gameBoard.append(column);
+            for (var j = 0; j < boardSize; j++) {
+                board[i][j] = new Cell(j, i);
+                var cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.setAttribute("x", j + "");
+                cell.setAttribute("y", i + "");
+                gameBoard.append(cell);
+                $(".cell[x='" + i + "'][y='" + j + "']").on("click", function (e) {
+                    var x = parseInt(e.target.getAttribute("x"));
+                    var y = parseInt(e.target.getAttribute("y"));
+                    console.log(board[y][x].element);
+                    board[y][x].move();
+                });
             }
         }
-        console.log(board[8][8].x);
     });
+}
+function getBoard(x, y) {
+    if (x >= 0 && x < boardSize && y >= 0 && y < boardSize) {
+        return board[y][x];
+    }
+    else {
+        return new Cell(-1, -1, false);
+    }
 }
 //menu
 //players
