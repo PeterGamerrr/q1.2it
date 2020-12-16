@@ -1,4 +1,4 @@
-console.log("v0.3.23");
+console.log("v0.3.26");
 //board game cell
 var root = document.documentElement;
 var playerCount = 2;
@@ -61,14 +61,14 @@ var Cell = /** @class */ (function () {
         configurable: true
     });
     Cell.prototype.move = function () {
-        console.log({
-            "x-1": getBoard(this.x - 1, this.y).element,
-            "y-1": getBoard(this.x, this.y - 1).element,
-            "x+1": getBoard(this.x + 1, this.y).element,
-            "y+1": getBoard(this.x, this.y + 1).element,
-            "claimable": this.claimable,
-            "claimedBy": this.claimedBy
-        });
+        // console.log({ //log: required conditions for moving
+        //     "x-1":getBoard(this.x-1, this.y)  .element,
+        //     "y-1":getBoard(this.x,   this.y-1).element,
+        //     "x+1":getBoard(this.x+1, this.y)  .element,
+        //     "y+1":getBoard(this.x,   this.y+1).element,
+        //     "claimable": this.claimable,
+        //     "claimedBy": this.claimedBy
+        // })
         if (this.claimedBy === 0 &&
             this.claimable === true &&
             (getBoard(this.x - 1, this.y).claimedBy === playerTurn ||
@@ -124,7 +124,7 @@ function startGame() {
                 $(".cell[x='" + i + "'][y='" + j + "']").on("click", function (e) {
                     var x = parseInt(e.target.getAttribute("x"));
                     var y = parseInt(e.target.getAttribute("y"));
-                    console.log(getBoard(x, y).element);
+                    // console.log(getBoard(x,y).element); //log: clicked target
                     getBoard(x, y).move();
                 });
             }
@@ -147,10 +147,12 @@ function setupStartPositions() {
     getBoard(boardSize - 1, boardSize - 1).claim(4);
 }
 function nextTurn() {
+    // console.log("old next turn: " + playerTurn) //log: turn before update
     playerTurn++;
     if (playerTurn > playerCount) {
-        playerTurn = 0;
+        playerTurn = 1;
     }
+    // console.log("new next turn: " + playerTurn) //log: turn after update
     updateContent();
 }
 function updateContent() {

@@ -1,4 +1,4 @@
-console.log("v0.3.24");
+console.log("v0.3.26");
 
 //board game cell
 let root = document.documentElement;
@@ -54,7 +54,7 @@ class Cell{
     }
 
     public move():void {
-        // console.log({
+        // console.log({ //log: required conditions for moving
         //     "x-1":getBoard(this.x-1, this.y)  .element,
         //     "y-1":getBoard(this.x,   this.y-1).element,
         //     "x+1":getBoard(this.x+1, this.y)  .element,
@@ -124,7 +124,7 @@ function startGame():void {
                 $(".cell[x='" + i +"'][y='" + j + "']").on("click", e => {
                     let x = parseInt(<string>e.target.getAttribute("x"));
                     let y = parseInt(<string>e.target.getAttribute("y"));
-                    // console.log(getBoard(x,y).element);
+                    // console.log(getBoard(x,y).element); //log: clicked target
                     getBoard(x,y).move();
 
                 })
@@ -150,10 +150,12 @@ function setupStartPositions(): void {
 }
 
 function nextTurn():void {
+    // console.log("old next turn: " + playerTurn) //log: turn before update
     playerTurn++;
     if (playerTurn > playerCount) {
-        playerTurn = 0;
+        playerTurn = 1;
     } 
+    // console.log("new next turn: " + playerTurn) //log: turn after update
     updateContent();
 }
 
