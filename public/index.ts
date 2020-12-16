@@ -1,3 +1,5 @@
+console.log("v0.3.24");
+
 //board game cell
 let root = document.documentElement;
 let playerCount = 2;
@@ -13,7 +15,6 @@ class Cell{
     private _x: number;
     private _y: number;
     private _bomb = false;
-    private _claimedBy = 0;
     private _claimable = true;
 
     constructor(x: number, y: number, claimable?: boolean) {
@@ -42,7 +43,10 @@ class Cell{
     }
 
     public get claimedBy(): number {
-        return this._claimedBy
+        return parseInt(<string>this.element.attr("c"))
+    }
+    public set claimedBy(value: number) {
+        this.element.attr("c",value);
     }
 
     public get claimable(): boolean {
@@ -50,34 +54,35 @@ class Cell{
     }
 
     public move():void {
-        console.log({
-            "x-1": getBoard(this.y,this.x-1).element,
-            "y-1": getBoard(this.y-1,this.x).element,
-            "x+1": getBoard(this.y,this.x+1).element,
-            "y+1": getBoard(this.y+1,this.x).element,
-            "claimable": this.claimable,
-            "claimedBy": this.claimedBy
-        })
+        // console.log({
+        //     "x-1":getBoard(this.x-1, this.y)  .element,
+        //     "y-1":getBoard(this.x,   this.y-1).element,
+        //     "x+1":getBoard(this.x+1, this.y)  .element,
+        //     "y+1":getBoard(this.x,   this.y+1).element,
+        //     "claimable": this.claimable,
+        //     "claimedBy": this.claimedBy
+        // })
         if (
             this.claimedBy === 0        &&
             this.claimable === true     &&
             (
-                getBoard(this.y,this.x-1).claimedBy === playerTurn    ||
-                getBoard(this.y-1,this.x).claimedBy === playerTurn    ||
-                getBoard(this.y,this.x+1).claimedBy === playerTurn    ||
-                getBoard(this.y+1,this.x).claimedBy === playerTurn    
+                getBoard(this.x-1, this.y)  .claimedBy === playerTurn    ||
+                getBoard(this.x,   this.y-1).claimedBy === playerTurn    ||
+                getBoard(this.x+1, this.y)  .claimedBy === playerTurn    ||
+                getBoard(this.x,   this.y+1).claimedBy === playerTurn    
             ) ) {
 
-            this.claim()
+            this.claim();
+            nextTurn();
         } 
     }
 
     public claim(player?: number):void {
         if (player == undefined) {
-            this._claimedBy = playerTurn;
+            this.claimedBy = playerTurn;
             this.element.attr("c", playerTurn)
         } else {
-            this._claimedBy = player;
+            this.claimedBy = player;
             this.element.attr("c", player)
         }
     }
@@ -109,30 +114,31 @@ function startGame():void {
         for (let i = 0; i < boardSize; i++) {
             board[i] = [];
             for (let j = 0; j < boardSize; j++) {
-                board[i][j] = new Cell(j,i);
+                board[i][j] = new Cell(i,j);
                 let cell = document.createElement("div");
                 cell.classList.add("cell");
-                cell.setAttribute("x",i +"");
-                cell.setAttribute("y",j +"");
-                cell.setAttribute("c",0 + "")
+                cell.setAttribute("x",i + "");
+                cell.setAttribute("y",j + "");
+                cell.setAttribute("c",0 + "");
                 gameBoard.append(cell);
                 $(".cell[x='" + i +"'][y='" + j + "']").on("click", e => {
                     let x = parseInt(<string>e.target.getAttribute("x"));
                     let y = parseInt(<string>e.target.getAttribute("y"));
-                    console.log(board[y][x].element);
+                    // console.log(getBoard(x,y).element);
                     getBoard(x,y).move();
 
                 })
             }
         }
+        setupStartPositions();
     });
 }
 
 function getBoard(x: number, y:number):Cell {
     if (x >= 0 && x < boardSize && y >= 0 && y < boardSize) {
-        return board[y][x]
+        return board[x][y];
     } else {
-        return new Cell(-1,-1,false)
+        return new Cell(-1,-1,false);
     }
 }
 
@@ -144,7 +150,15 @@ function setupStartPositions(): void {
 }
 
 function nextTurn():void {
-    // do nextturn and update all data on screen
+    playerTurn++;
+    if (playerTurn > playerCount) {
+        playerTurn = 0;
+    } 
+    updateContent();
+}
+
+function updateContent():void {
+    //TODO: update content
 }
 
 

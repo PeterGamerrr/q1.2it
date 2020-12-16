@@ -1,3 +1,4 @@
+console.log("v0.3.23");
 //board game cell
 var root = document.documentElement;
 var playerCount = 2;
@@ -11,7 +12,6 @@ var scores = [0, 0, 0, 0];
 var Cell = /** @class */ (function () {
     function Cell(x, y, claimable) {
         this._bomb = false;
-        this._claimedBy = 0;
         this._claimable = true;
         this._x = x;
         this._y = y;
@@ -45,7 +45,10 @@ var Cell = /** @class */ (function () {
     });
     Object.defineProperty(Cell.prototype, "claimedBy", {
         get: function () {
-            return this._claimedBy;
+            return parseInt(this.element.attr("c"));
+        },
+        set: function (value) {
+            this.element.attr("c", value);
         },
         enumerable: false,
         configurable: true
@@ -59,29 +62,30 @@ var Cell = /** @class */ (function () {
     });
     Cell.prototype.move = function () {
         console.log({
-            "x-1": getBoard(this.y, this.x - 1).element,
-            "y-1": getBoard(this.y - 1, this.x).element,
-            "x+1": getBoard(this.y, this.x + 1).element,
-            "y+1": getBoard(this.y + 1, this.x).element,
+            "x-1": getBoard(this.x - 1, this.y).element,
+            "y-1": getBoard(this.x, this.y - 1).element,
+            "x+1": getBoard(this.x + 1, this.y).element,
+            "y+1": getBoard(this.x, this.y + 1).element,
             "claimable": this.claimable,
             "claimedBy": this.claimedBy
         });
         if (this.claimedBy === 0 &&
             this.claimable === true &&
-            (getBoard(this.y, this.x - 1).claimedBy === playerTurn ||
-                getBoard(this.y - 1, this.x).claimedBy === playerTurn ||
-                getBoard(this.y, this.x + 1).claimedBy === playerTurn ||
-                getBoard(this.y + 1, this.x).claimedBy === playerTurn)) {
+            (getBoard(this.x - 1, this.y).claimedBy === playerTurn ||
+                getBoard(this.x, this.y - 1).claimedBy === playerTurn ||
+                getBoard(this.x + 1, this.y).claimedBy === playerTurn ||
+                getBoard(this.x, this.y + 1).claimedBy === playerTurn)) {
             this.claim();
+            nextTurn();
         }
     };
     Cell.prototype.claim = function (player) {
         if (player == undefined) {
-            this._claimedBy = playerTurn;
+            this.claimedBy = playerTurn;
             this.element.attr("c", playerTurn);
         }
         else {
-            this._claimedBy = player;
+            this.claimedBy = player;
             this.element.attr("c", player);
         }
     };
@@ -120,16 +124,17 @@ function startGame() {
                 $(".cell[x='" + i + "'][y='" + j + "']").on("click", function (e) {
                     var x = parseInt(e.target.getAttribute("x"));
                     var y = parseInt(e.target.getAttribute("y"));
-                    console.log(board[y][x].element);
+                    console.log(getBoard(x, y).element);
                     getBoard(x, y).move();
                 });
             }
         }
+        setupStartPositions();
     });
 }
 function getBoard(x, y) {
     if (x >= 0 && x < boardSize && y >= 0 && y < boardSize) {
-        return board[y][x];
+        return board[x][y];
     }
     else {
         return new Cell(-1, -1, false);
@@ -142,7 +147,14 @@ function setupStartPositions() {
     getBoard(boardSize - 1, boardSize - 1).claim(4);
 }
 function nextTurn() {
-    // do nextturn and update all data on screen
+    playerTurn++;
+    if (playerTurn > playerCount) {
+        playerTurn = 0;
+    }
+    updateContent();
+}
+function updateContent() {
+    //TODO: update content
 }
 //menu
 //players
