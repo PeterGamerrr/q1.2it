@@ -76,9 +76,27 @@ main{
         max-width: calc(500px + 2rem);
 
         .cell {
-            background: $black-70
+            background: $black-70;
+    
+            &[c='1'] {
+                background: $firstPlayerColor;
+            };
+    
+            &[c='2'] {
+                background: $secondPlayerColor;
+            };
+    
+            &[c='3'] {
+                background: $thirthPlayerColor;
+            }
+    
+            &[c='4'] {
+                background: $fourthPlayerColor;
+            }
+    
         
         }
+
     }
 
 }

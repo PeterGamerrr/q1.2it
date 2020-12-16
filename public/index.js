@@ -7,6 +7,7 @@ var bombs;
 var menuDifficulty = 0;
 var board;
 var playerTurn = 1;
+var scores = [0, 0, 0, 0];
 var Cell = /** @class */ (function () {
     function Cell(x, y, claimable) {
         this._bomb = false;
@@ -57,12 +58,31 @@ var Cell = /** @class */ (function () {
         configurable: true
     });
     Cell.prototype.move = function () {
+        console.log({
+            "x-1": getBoard(this.y, this.x - 1).element,
+            "y-1": getBoard(this.y - 1, this.x).element,
+            "x+1": getBoard(this.y, this.x + 1).element,
+            "y+1": getBoard(this.y + 1, this.x).element,
+            "claimable": this.claimable,
+            "claimedBy": this.claimedBy
+        });
         if (this.claimedBy === 0 &&
             this.claimable === true &&
-            (getBoard(this.y - 1, this.x).claimedBy === playerTurn ||
-                getBoard(this.y + 1, this.x).claimedBy === playerTurn ||
-                getBoard(this.y, this.x - 1).claimedBy === playerTurn ||
-                getBoard(this.y, this.x + 1).claimedBy === playerTurn)) {
+            (getBoard(this.y, this.x - 1).claimedBy === playerTurn ||
+                getBoard(this.y - 1, this.x).claimedBy === playerTurn ||
+                getBoard(this.y, this.x + 1).claimedBy === playerTurn ||
+                getBoard(this.y + 1, this.x).claimedBy === playerTurn)) {
+            this.claim();
+        }
+    };
+    Cell.prototype.claim = function (player) {
+        if (player == undefined) {
+            this._claimedBy = playerTurn;
+            this.element.attr("c", playerTurn);
+        }
+        else {
+            this._claimedBy = player;
+            this.element.attr("c", player);
         }
     };
     Cell.prototype.explode = function (x, y) {
@@ -90,17 +110,18 @@ function startGame() {
         for (var i = 0; i < boardSize; i++) {
             board[i] = [];
             for (var j = 0; j < boardSize; j++) {
-                board[i][j] = new Cell(j, i);
+                board[i][j] = new Cell(i, j);
                 var cell = document.createElement("div");
                 cell.classList.add("cell");
-                cell.setAttribute("x", j + "");
-                cell.setAttribute("y", i + "");
+                cell.setAttribute("x", i + "");
+                cell.setAttribute("y", j + "");
+                cell.setAttribute("c", 0 + "");
                 gameBoard.append(cell);
                 $(".cell[x='" + i + "'][y='" + j + "']").on("click", function (e) {
                     var x = parseInt(e.target.getAttribute("x"));
                     var y = parseInt(e.target.getAttribute("y"));
                     console.log(board[y][x].element);
-                    board[y][x].move();
+                    getBoard(x, y).move();
                 });
             }
         }
@@ -113,6 +134,15 @@ function getBoard(x, y) {
     else {
         return new Cell(-1, -1, false);
     }
+}
+function setupStartPositions() {
+    getBoard(0, 0).claim(1);
+    getBoard(0, boardSize - 1).claim(2);
+    getBoard(boardSize - 1, 0).claim(3);
+    getBoard(boardSize - 1, boardSize - 1).claim(4);
+}
+function nextTurn() {
+    // do nextturn and update all data on screen
 }
 //menu
 //players

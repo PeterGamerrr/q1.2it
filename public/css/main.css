@@ -86,6 +86,22 @@ main .gameboard .cell {
   background: rgba(0, 0, 0, 0.7);
 }
 
+main .gameboard .cell[c='1'] {
+  background: magenta;
+}
+
+main .gameboard .cell[c='2'] {
+  background: orange;
+}
+
+main .gameboard .cell[c='3'] {
+  background: lightgreen;
+}
+
+main .gameboard .cell[c='4'] {
+  background: lightblue;
+}
+
 div.bg-image {
   background: url("../images/bg-image.png") center top 8rem no-repeat;
   background-size: 100% 75%;

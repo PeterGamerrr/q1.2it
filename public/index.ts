@@ -7,6 +7,7 @@ let bombs:number;
 let menuDifficulty = 0;
 let board:Cell[][];
 let playerTurn = 1;
+let scores = [0,0,0,0];
 
 class Cell{ 
     private _x: number;
@@ -49,16 +50,35 @@ class Cell{
     }
 
     public move():void {
+        console.log({
+            "x-1": getBoard(this.y,this.x-1).element,
+            "y-1": getBoard(this.y-1,this.x).element,
+            "x+1": getBoard(this.y,this.x+1).element,
+            "y+1": getBoard(this.y+1,this.x).element,
+            "claimable": this.claimable,
+            "claimedBy": this.claimedBy
+        })
         if (
             this.claimedBy === 0        &&
             this.claimable === true     &&
             (
-                getBoard(this.y-1,this.x).claimedBy === playerTurn    ||
-                getBoard(this.y+1,this.x).claimedBy === playerTurn    ||
                 getBoard(this.y,this.x-1).claimedBy === playerTurn    ||
-                getBoard(this.y,this.x+1).claimedBy === playerTurn
+                getBoard(this.y-1,this.x).claimedBy === playerTurn    ||
+                getBoard(this.y,this.x+1).claimedBy === playerTurn    ||
+                getBoard(this.y+1,this.x).claimedBy === playerTurn    
             ) ) {
-            
+
+            this.claim()
+        } 
+    }
+
+    public claim(player?: number):void {
+        if (player == undefined) {
+            this._claimedBy = playerTurn;
+            this.element.attr("c", playerTurn)
+        } else {
+            this._claimedBy = player;
+            this.element.attr("c", player)
         }
     }
 
@@ -92,14 +112,15 @@ function startGame():void {
                 board[i][j] = new Cell(j,i);
                 let cell = document.createElement("div");
                 cell.classList.add("cell");
-                cell.setAttribute("x",j +"");
-                cell.setAttribute("y",i +"");
+                cell.setAttribute("x",i +"");
+                cell.setAttribute("y",j +"");
+                cell.setAttribute("c",0 + "")
                 gameBoard.append(cell);
                 $(".cell[x='" + i +"'][y='" + j + "']").on("click", e => {
                     let x = parseInt(<string>e.target.getAttribute("x"));
                     let y = parseInt(<string>e.target.getAttribute("y"));
                     console.log(board[y][x].element);
-                    board[y][x].move();
+                    getBoard(x,y).move();
 
                 })
             }
@@ -115,6 +136,16 @@ function getBoard(x: number, y:number):Cell {
     }
 }
 
+function setupStartPositions(): void {
+    getBoard(0,0).claim(1);
+    getBoard(0,boardSize-1).claim(2);
+    getBoard(boardSize-1,0).claim(3);
+    getBoard(boardSize-1,boardSize-1).claim(4);
+}
+
+function nextTurn():void {
+    // do nextturn and update all data on screen
+}
 
 
 
