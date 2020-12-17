@@ -53,7 +53,7 @@ class Cell{
         return this._claimable;
     }
 
-    public move():void {
+    public move(player: number):void {
         // console.log({ //log: required conditions for moving
         //     "x-1":getBoard(this.x-1, this.y)  .element,
         //     "y-1":getBoard(this.x,   this.y-1).element,
@@ -75,6 +75,18 @@ class Cell{
             this.claim();
             nextTurn();
         } 
+    }
+
+    public canMoveHere(player: number): boolean {
+        return (
+            this.claimedBy === 0        &&
+            this.claimable === true     &&
+            (
+                getBoard(this.x-1, this.y)  .claimedBy === playerTurn    ||
+                getBoard(this.x,   this.y-1).claimedBy === playerTurn    ||
+                getBoard(this.x+1, this.y)  .claimedBy === playerTurn    ||
+                getBoard(this.x,   this.y+1).claimedBy === playerTurn    
+            ) )
     }
 
     public claim(player?: number):void {
@@ -157,6 +169,14 @@ function nextTurn():void {
     } 
     // console.log("new next turn: " + playerTurn) //log: turn after update
     updateContent();
+}
+
+function canMove():boolean {
+    board.forEach(element => {
+        element.forEach(cell => {
+            
+        });
+    });
 }
 
 function updateContent():void {

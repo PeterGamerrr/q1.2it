@@ -1,78 +1,78 @@
+<!DOCTYPE html5> 
 <html>
-    <head>
+    <head>                                                                                                  
         <!-- <link href="bootstrap.min.css" rel="stylesheet" type="text/css"> -->
         <link href="bootstrap-grid.min.css" rel="stylesheet" type="text/css">
         <link href="bootstrap-reboot.min.css" rel="stylesheet" type="text/css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" async></script>
         <link rel="stylesheet" href="main.css">
-        <meta charset="utf-8" />         
+        <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <title>Colomb</title>
+        <title>Colomb</title>                                                                                   
         <script src="index.js" defer></script>
     </head>
+    <body>                                                                                             
+      <main>                                                                                                  
+        <div class="container">                                                                                   
+          <div class="row">
+            <div class="col-12">
+              <h1 class="header">Colomb</h1>
+            </div>
+          </div>
 
-    <body>
-    <main>
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <h1 class="header">Colomb</h1>
+          <div class="row players">
+            <div class="col-12">
+              <h2 class="title">Spelers</h2>
+            </div>
+            <div class="col-4">
+              <button onclick="setMenuPlayerCount(2)">2 spelers</button>
+            </div>
+            <div class="col-4">
+              <button onclick="setMenuPlayerCount(3)">3 spelers</button>
+            </div>
+            <div class="col-4">
+              <button onclick="setMenuPlayerCount(4)">4 spelers</button>
+            </div>
           </div>
-        </div>
 
-        <div class="row players">
-          <div class="col-12">
-            <h2 class="title">Spelers</h2>
+          <div class="row size">
+            <div class="col-12">
+              <h2 class="title">Size</h2>
+            </div>
+            <div class="col-4">
+              <button onclick="setMenuBoardSize(0)">Klein</button>
+            </div>
+            <div class="col-4">
+              <button onclick="setMenuBoardSize(1)"">Medium</button>
+            </div>
+            <div class="col-4">
+              <button onclick="setMenuBoardSize(2)">Groot</button>
+            </div>
           </div>
-          <div class="col-4">
-            <button onclick="setMenuPlayerCount(2)">2 spelers</button>
-          </div>
-          <div class="col-4">
-            <button onclick="setMenuPlayerCount(3)">3 spelers</button>
-          </div>
-          <div class="col-4">
-            <button onclick="setMenuPlayerCount(4)">4 spelers</button>
-          </div>
-        </div>
 
-        <div class="row size">
-          <div class="col-12">
-            <h2 class="title">Size</h2>
+          <div class="row level">
+            <div class="col-12">
+              <h2 class="title">Moeilijkheid</h2>
+            </div>
+            <div class="col-4">
+              <button onclick="setDifficulty(0)">Makkelijk</button>
+            </div>
+            <div class="col-4">
+              <button onclick="setDifficulty(1)">Moeilijk</button>
+            </div>
+            <div class="col-4">
+              <button onclick="setDifficulty(2)">Extreem</button>
+            </div>
           </div>
-          <div class="col-4">
-            <button onclick="setMenuBoardSize(0)">Klein</button>
-          </div>
-          <div class="col-4">
-            <button onclick="setMenuBoardSize(1)"">Medium</button>
-          </div>
-          <div class="col-4">
-            <button onclick="setMenuBoardSize(2)">Groot</button>
-          </div>
-        </div>
 
-        <div class="row level">
-          <div class="col-12">
-            <h2 class="title">Moeilijkheid</h2>
+          <div class="row d-flex justify-content-center">
+            <div class="col-4 start-btn-container">
+              <button class="start-btn" onclick="startGame()">Start spel</button>
+            </div>
           </div>
-          <div class="col-4">
-            <button onclick="setDifficulty(0)">Makkelijk</button>
-          </div>
-          <div class="col-4">
-            <button onclick="setDifficulty(1)">Moeilijk</button>
-          </div>
-          <div class="col-4">
-            <button onclick="setDifficulty(2)">Extreem</button>
-          </div>
+          
         </div>
-
-        <div class="row d-flex justify-content-center">
-          <div class="col-4 start-btn-container">
-            <button class="start-btn" onclick="startGame()">Start spel</button>
-          </div>
-        </div>
-        
-      </div>
-    </main>
+      </main>
       <div class="fluid-container bg-image"></div>
     </body>
 
