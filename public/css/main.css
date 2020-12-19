@@ -5,11 +5,13 @@
 
 body {
   font-size: 14px;
-  font-family: 'Roboto';
+  font-family: "Roboto";
 }
 
-main h1, main h2, main h3 {
-  font-family: 'Permanent Marker';
+main h1,
+main h2,
+main h3 {
+  font-family: "Permanent Marker";
 }
 
 main button {
@@ -50,7 +52,7 @@ main div.sideboard {
   width: 100%;
   height: 500px;
   color: #ffffff;
-  font-family: 'Permanent Marker';
+  font-family: "Permanent Marker";
   text-align: center;
   padding: 20px;
 }
@@ -74,10 +76,10 @@ main .fourthPlayer {
 main .gameboard {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: (1fr)[var];
-      grid-template-columns: repeat(var(--boardsize), 1fr);
-  -ms-grid-rows: (1fr)[var];
-      grid-template-rows: repeat(var(--boardsize), 1fr);
+  -ms-grid-columns: (1fr) [var];
+  grid-template-columns: repeat(var(--boardsize), 1fr);
+  -ms-grid-rows: (1fr) [var];
+  grid-template-rows: repeat(var(--boardsize), 1fr);
   grid-gap: 0.5rem;
   max-width: calc(500px + 2rem);
 }
@@ -86,19 +88,19 @@ main .gameboard .cell {
   background: rgba(0, 0, 0, 0.7);
 }
 
-main .gameboard .cell[c='1'] {
+main .gameboard .cell[c="1"] {
   background: magenta;
 }
 
-main .gameboard .cell[c='2'] {
+main .gameboard .cell[c="2"] {
   background: orange;
 }
 
-main .gameboard .cell[c='3'] {
+main .gameboard .cell[c="3"] {
   background: lightgreen;
 }
 
-main .gameboard .cell[c='4'] {
+main .gameboard .cell[c="4"] {
   background: lightblue;
 }
 

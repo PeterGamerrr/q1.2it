@@ -20,7 +20,8 @@
   "homepage": "https://github.com/PeterGamerrr/q1.2it#readme",
   "devDependencies": {
     "@types/jquery": "^3.5.5",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "prettier": "2.2.1"
   },
   "dependencies": {
     "express": "^4.17.1",
