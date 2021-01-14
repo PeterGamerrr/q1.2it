@@ -1,4 +1,4 @@
-console.log("v0.4.0");
+console.log("v0.4.11");
 
 //board game cell
 let root = document.documentElement;
@@ -15,7 +15,6 @@ let scores = [0, 0, 0, 0];
 class Player {
   private _x: number;
   private _y: number;
-  private _dead = false;
 
   constructor(x: number, y:number) {
     this._x = x;
@@ -31,9 +30,7 @@ class Player {
     return this._y;
   }
 
-  public get dead() : boolean {
-    return this._dead;
-  }
+  
 
   public set x(x : number) {
     this._x = x;
@@ -45,7 +42,7 @@ class Player {
 
   public move(x:number, y:number):void {
     if (
-      getBoard(x,y).claimedBy == 0 && (
+      getBoard(x,y).claimedBy === 0 && (
         (x === this.x && y === this.y-1) || 
         (x === this.x && y === this.y+1) || 
         (x === this.x-1 && y === this.y) || 
@@ -55,10 +52,26 @@ class Player {
       getBoard(x,y).claim();
       this.x = x;
       this.y = y;
+      getBoard(x,y-1).element.removeClass("player" + playerTurn);
+      getBoard(x,y+1).element.removeClass("player" + playerTurn);
+      getBoard(x-1,y).element.removeClass("player" + playerTurn);
+      getBoard(x+1,y).element.removeClass("player" + playerTurn);
+      getBoard(x,y).element.addClass("player" + playerTurn);
+      nextTurn();
+    } 
+    else if (getBoard(x,y).claimedBy === playerTurn) {
+      this.x = x;
+      this.y = y;
+      getBoard(x,y-1).element.removeClass("player" + playerTurn);
+      getBoard(x,y+1).element.removeClass("player" + playerTurn);
+      getBoard(x-1,y).element.removeClass("player" + playerTurn);
+      getBoard(x+1,y).element.removeClass("player" + playerTurn);
+      getBoard(x,y).element.addClass("player" + playerTurn);
+      nextTurn();
     }
 
 
-    nextTurn();
+    
   }
   
 }
@@ -107,6 +120,10 @@ class Cell {
     return this._claimable;
   }
 
+
+  /**
+   * @deprecated since version 4.10
+   */  
   public move(player: number): void {
     // console.log({ //log: required conditions for moving
     //     "x-1":getBoard(this.x-1, this.y)  .element,
@@ -127,8 +144,12 @@ class Cell {
       this.claim();
       nextTurn();
     }
+
   }
 
+ /**
+   * @deprecated since version 4.10
+   */  
   public canMoveHere(player: number): boolean {
     return (
       this.claimedBy === 0 &&
@@ -203,18 +224,23 @@ function getBoard(x: number, y: number): Cell {
   }
 }
 
-function getCurrentPlayer(): Player {
-  return players[playerTurn-1];
+function getCurrentPlayer(): Player{
+  return <Player>players[playerTurn-1];
 }
 
 function setupStartPositions(): void {
   getBoard(0, 0).claim(1);
+  getBoard(0, 0).element.addClass("player1")
   getBoard(0, boardSize - 1).claim(2);
+  getBoard(0, boardSize - 1).element.addClass("player2")
+  
   players[1] = new Player(0,boardSize - 1);
 
   if (playerCount >= 3) {
     getBoard(boardSize - 1, 0).claim(3);
     players[2] = new Player(boardSize - 1, 0);
+    getBoard(boardSize - 1, 0).element.addClass("player3")
+
   }
 
   if (playerCount >= 4){
@@ -230,9 +256,10 @@ function nextTurn(): void {
   if (playerTurn > playerCount) {
     playerTurn = 1;
   }
-  if (getCurrentPlayer().dead)
+  
   // console.log("new next turn: " + playerTurn) //log: turn after update
   updateContent();
+  console.log(playerTurn);
 }
 
 

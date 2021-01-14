@@ -1,4 +1,4 @@
-console.log("v0.4.0");
+console.log("v0.4.11");
 //board game cell
 var root = document.documentElement;
 var playerCount = 2;
@@ -12,7 +12,6 @@ var playerTurn = 1;
 var scores = [0, 0, 0, 0];
 var Player = /** @class */ (function () {
     function Player(x, y) {
-        this._dead = false;
         this._x = x;
         this._y = y;
     }
@@ -36,23 +35,31 @@ var Player = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Player.prototype, "dead", {
-        get: function () {
-            return this._dead;
-        },
-        enumerable: false,
-        configurable: true
-    });
     Player.prototype.move = function (x, y) {
-        if (getBoard(x, y).claimedBy == 0 && ((x === this.x && y === this.y - 1) ||
+        if (getBoard(x, y).claimedBy === 0 && ((x === this.x && y === this.y - 1) ||
             (x === this.x && y === this.y + 1) ||
             (x === this.x - 1 && y === this.y) ||
             (x === this.x + 1 && y === this.y))) {
             getBoard(x, y).claim();
             this.x = x;
             this.y = y;
+            getBoard(x, y - 1).element.removeClass("player" + playerTurn);
+            getBoard(x, y + 1).element.removeClass("player" + playerTurn);
+            getBoard(x - 1, y).element.removeClass("player" + playerTurn);
+            getBoard(x + 1, y).element.removeClass("player" + playerTurn);
+            getBoard(x, y).element.addClass("player" + playerTurn);
+            nextTurn();
         }
-        nextTurn();
+        else if (getBoard(x, y).claimedBy === playerTurn) {
+            this.x = x;
+            this.y = y;
+            getBoard(x, y - 1).element.removeClass("player" + playerTurn);
+            getBoard(x, y + 1).element.removeClass("player" + playerTurn);
+            getBoard(x - 1, y).element.removeClass("player" + playerTurn);
+            getBoard(x + 1, y).element.removeClass("player" + playerTurn);
+            getBoard(x, y).element.addClass("player" + playerTurn);
+            nextTurn();
+        }
     };
     return Player;
 }());
@@ -108,6 +115,9 @@ var Cell = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    /**
+     * @deprecated since version 4.10
+     */
     Cell.prototype.move = function (player) {
         // console.log({ //log: required conditions for moving
         //     "x-1":getBoard(this.x-1, this.y)  .element,
@@ -127,6 +137,9 @@ var Cell = /** @class */ (function () {
             nextTurn();
         }
     };
+    /**
+      * @deprecated since version 4.10
+      */
     Cell.prototype.canMoveHere = function (player) {
         return (this.claimedBy === 0 &&
             this.claimable === true &&
@@ -201,11 +214,14 @@ function getCurrentPlayer() {
 }
 function setupStartPositions() {
     getBoard(0, 0).claim(1);
+    getBoard(0, 0).element.addClass("player1");
     getBoard(0, boardSize - 1).claim(2);
+    getBoard(0, boardSize - 1).element.addClass("player2");
     players[1] = new Player(0, boardSize - 1);
     if (playerCount >= 3) {
         getBoard(boardSize - 1, 0).claim(3);
         players[2] = new Player(boardSize - 1, 0);
+        getBoard(boardSize - 1, 0).element.addClass("player3");
     }
     if (playerCount >= 4) {
         getBoard(boardSize - 1, boardSize - 1).claim(4);
@@ -218,9 +234,9 @@ function nextTurn() {
     if (playerTurn > playerCount) {
         playerTurn = 1;
     }
-    if (getCurrentPlayer().dead)
-        // console.log("new next turn: " + playerTurn) //log: turn after update
-        updateContent();
+    // console.log("new next turn: " + playerTurn) //log: turn after update
+    updateContent();
+    console.log(playerTurn);
 }
 function updateContent() {
     //TODO: update content
