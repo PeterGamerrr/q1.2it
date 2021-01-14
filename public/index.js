@@ -5,18 +5,18 @@ var playerCount = 2;
 var menuBoardSize = 0;
 var boardSize;
 var bombs;
+var bombsExploded;
 var menuDifficulty = 0;
 var board;
 var playerTurn = 1;
 var scores = [0, 0, 0, 0];
-var players;
-var player = /** @class */ (function () {
-    function player(x, y) {
+var Player = /** @class */ (function () {
+    function Player(x, y) {
         this._dead = false;
         this._x = x;
         this._y = y;
     }
-    Object.defineProperty(player.prototype, "x", {
+    Object.defineProperty(Player.prototype, "x", {
         get: function () {
             return this._x;
         },
@@ -26,7 +26,7 @@ var player = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(player.prototype, "y", {
+    Object.defineProperty(Player.prototype, "y", {
         get: function () {
             return this._y;
         },
@@ -36,14 +36,14 @@ var player = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(player.prototype, "dead", {
+    Object.defineProperty(Player.prototype, "dead", {
         get: function () {
             return this._dead;
         },
         enumerable: false,
         configurable: true
     });
-    player.prototype.move = function (x, y) {
+    Player.prototype.move = function (x, y) {
         if (getBoard(x, y).claimedBy == 0 && ((x === this.x && y === this.y - 1) ||
             (x === this.x && y === this.y + 1) ||
             (x === this.x - 1 && y === this.y) ||
@@ -51,8 +51,9 @@ var player = /** @class */ (function () {
             getBoard(x, y).claim();
         }
     };
-    return player;
+    return Player;
 }());
+var players = [new Player(0, 0), undefined, undefined, undefined];
 var Cell = /** @class */ (function () {
     function Cell(x, y, claimable) {
         this._bomb = false;
@@ -177,7 +178,7 @@ function startGame() {
                     var x = parseInt(e.target.getAttribute("x"));
                     var y = parseInt(e.target.getAttribute("y"));
                     // console.log(getBoard(x,y).element); //log: clicked target
-                    getBoard(x, y).move(playerTurn);
+                    getCurrentPlayer().move(x, y);
                 });
             }
         }
@@ -197,16 +198,15 @@ function getCurrentPlayer() {
 }
 function setupStartPositions() {
     getBoard(0, 0).claim(1);
-    players[0] = new player(0, 0);
     getBoard(0, boardSize - 1).claim(2);
-    players[1] = new player(0, boardSize - 1);
+    players[1] = new Player(0, boardSize - 1);
     if (playerCount >= 3) {
         getBoard(boardSize - 1, 0).claim(3);
-        players[2] = new player(boardSize - 1, 0);
+        players[2] = new Player(boardSize - 1, 0);
     }
     if (playerCount >= 4) {
         getBoard(boardSize - 1, boardSize - 1).claim(4);
-        players[3] = new player(boardSize - 1, boardSize - 1);
+        players[3] = new Player(boardSize - 1, boardSize - 1);
     }
 }
 function nextTurn() {

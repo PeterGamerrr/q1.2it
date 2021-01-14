@@ -6,13 +6,13 @@ let playerCount = 2;
 let menuBoardSize = 0;
 let boardSize: number;
 let bombs: number;
+let bombsExploded: number;
 let menuDifficulty = 0;
 let board: Cell[][];
 let playerTurn = 1;
 let scores = [0, 0, 0, 0];
-let players: player[];
 
-class player {
+class Player {
   private _x: number;
   private _y: number;
   private _dead = false;
@@ -58,6 +58,9 @@ class player {
   }
   
 }
+
+let players= [new Player(0,0),undefined,undefined,undefined];
+
 
 class Cell {
   private _x: number;
@@ -180,7 +183,7 @@ function startGame(): void {
           let x = parseInt(<string>e.target.getAttribute("x"));
           let y = parseInt(<string>e.target.getAttribute("y"));
           // console.log(getBoard(x,y).element); //log: clicked target
-          getBoard(x, y).move(playerTurn);
+          getCurrentPlayer().move(x, y);
         });
       }
     }
@@ -196,24 +199,23 @@ function getBoard(x: number, y: number): Cell {
   }
 }
 
-function getCurrentPlayer(): player {
+function getCurrentPlayer(): Player {
   return players[playerTurn-1];
 }
 
 function setupStartPositions(): void {
   getBoard(0, 0).claim(1);
-  players[0] = new player(0,0);
   getBoard(0, boardSize - 1).claim(2);
-  players[1] = new player(0,boardSize - 1);
+  players[1] = new Player(0,boardSize - 1);
 
   if (playerCount >= 3) {
     getBoard(boardSize - 1, 0).claim(3);
-    players[2] = new player(boardSize - 1, 0);
+    players[2] = new Player(boardSize - 1, 0);
   }
 
   if (playerCount >= 4){
     getBoard(boardSize - 1, boardSize - 1).claim(4);
-    players[3] = new player(boardSize - 1, boardSize - 1);
+    players[3] = new Player(boardSize - 1, boardSize - 1);
   }
   
 }
