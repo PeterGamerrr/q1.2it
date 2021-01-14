@@ -81,21 +81,49 @@ main {
       background: $black-70;
 
       &[c="1"] {
-        background: $firstPlayerColor;
+        background-color: $firstPlayerColor;
       }
 
       &[c="2"] {
-        background: $secondPlayerColor;
+        background-color: $secondPlayerColor;
       }
 
       &[c="3"] {
-        background: $thirthPlayerColor;
+        background-color: $thirthPlayerColor;
       }
 
       &[c="4"] {
-        background: $fourthPlayerColor;
+        background-color: $fourthPlayerColor;
       }
     }
+
+    // .player1 {
+    //   background-color: rgb(148, 3, 148) !important; 
+    //   background-image: url("../playericons/speler1.png") !important;
+    //   background-size: auto;
+    //   background-repeat: no-repeat;
+    // }
+    
+    // .player2 {
+    //   background-color: rgb(168, 110, 2) !important;
+    //   background-image: url("../playericons/speler2.png") !important;
+    //   background-size: auto;
+    //   background-repeat: no-repeat;
+    // }
+    
+    // .player3 {
+    //   background-color: rgb(51, 136, 51) !important;
+    //   background-image: url("../playericons/speler3.png") !important;
+    //   background-size: auto;
+    //   background-repeat: no-repeat;
+    // }
+    
+    // .player4 {
+    //   background-color: rgb(35, 106, 129) !important;
+    //   background-image: url("../playericons/speler4.png") !important;
+    //   background-size: auto;
+    //   background-repeat: no-repeat;
+    // } 
   }
 }
 
@@ -110,18 +138,3 @@ div.bg-image {
   z-index: -1;
 }
 
-.player1 {
-  background-image: url("../playericons/speler1.png");
-}
-
-.player2 {
-  background-image: url("../playericons/speler2.png");
-}
-
-.player3 {
-  background-image: url("../playericons/speler3.png");
-}
-
-.player4 {
-  background-image: url("../playericons/speler4.png");
-}
