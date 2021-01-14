@@ -1,4 +1,4 @@
-console.log("v0.5.6");
+console.log("v0.6.0");
 
 //board game cell
 let root = document.documentElement;
@@ -471,5 +471,5 @@ function setDifficulty(num: number): void {
 
 //end cards
 function checkEndStates(): void {
-  
+
 }

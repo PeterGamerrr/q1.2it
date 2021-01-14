@@ -1,4 +1,4 @@
-console.log("v0.5.6");
+console.log("v0.6.0");
 //board game cell
 var root = document.documentElement;
 var playerCount = 2;
