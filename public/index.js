@@ -1,4 +1,4 @@
-console.log("v0.4.32");
+console.log("v0.5.0");
 //board game cell
 var root = document.documentElement;
 var playerCount = 2;
@@ -10,6 +10,7 @@ var menuDifficulty = 0;
 var board;
 var playerTurn = 1;
 var scores = [1, 1, 1, 1];
+var availableCells;
 var Player = /** @class */ (function () {
     function Player(x, y) {
         this._x = x;
@@ -155,8 +156,23 @@ var Cell = /** @class */ (function () {
         }
     };
     Cell.prototype.explode = function () {
-        //TODO: make explosion
-        console.log("BOOM");
+        console.log("BOOM X: " + this.x + " Y: " + this.y);
+        this.resetCell();
+        getBoard(this.x - 1, this.y - 1).resetCell();
+        getBoard(this.x - 1, this.y).resetCell();
+        getBoard(this.x - 1, this.y + 1).resetCell();
+        getBoard(this.x, this.y - 1).resetCell();
+        getBoard(this.x, this.y + 1).resetCell();
+        getBoard(this.x + 1, this.y - 1).resetCell();
+        getBoard(this.x + 1, this.y).resetCell();
+        getBoard(this.x + 1, this.y + 1).resetCell();
+    };
+    Cell.prototype.resetCell = function () {
+        if (this.claimedBy !== 0) {
+            scores[this.claimedBy - 1]--;
+            availableCells++;
+            this.claimedBy = 0;
+        }
     };
     Object.defineProperty(Cell.prototype, "element", {
         get: function () {
