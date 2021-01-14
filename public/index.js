@@ -1,4 +1,4 @@
-console.log("v0.4.11");
+console.log("v0.4.16");
 //board game cell
 var root = document.documentElement;
 var playerCount = 2;
@@ -43,21 +43,13 @@ var Player = /** @class */ (function () {
             getBoard(x, y).claim();
             this.x = x;
             this.y = y;
-            getBoard(x, y - 1).element.removeClass("player" + playerTurn);
-            getBoard(x, y + 1).element.removeClass("player" + playerTurn);
-            getBoard(x - 1, y).element.removeClass("player" + playerTurn);
-            getBoard(x + 1, y).element.removeClass("player" + playerTurn);
-            getBoard(x, y).element.addClass("player" + playerTurn);
+            movePlayerIcon(x, y, playerTurn);
             nextTurn();
         }
         else if (getBoard(x, y).claimedBy === playerTurn) {
             this.x = x;
             this.y = y;
-            getBoard(x, y - 1).element.removeClass("player" + playerTurn);
-            getBoard(x, y + 1).element.removeClass("player" + playerTurn);
-            getBoard(x - 1, y).element.removeClass("player" + playerTurn);
-            getBoard(x + 1, y).element.removeClass("player" + playerTurn);
-            getBoard(x, y).element.addClass("player" + playerTurn);
+            movePlayerIcon(x, y, playerTurn);
             nextTurn();
         }
     };
@@ -242,6 +234,24 @@ function setupStartPositions() {
         players[3] = new Player(boardSize - 1, boardSize - 1);
         // getBoard(boardSize - 1, 0).element.addClass("player4")
         getBoard(boardSize - 1, boardSize - 1).element.append(player4Img);
+    }
+}
+function movePlayerIcon(x, y, player) {
+    switch (player) {
+        case 1:
+            getBoard(x, y).element.append(player1Img);
+            break;
+        case 2:
+            getBoard(x, y).element.append(player2Img);
+            break;
+        case 3:
+            getBoard(x, y).element.append(player3Img);
+            break;
+        case 4:
+            getBoard(x, y).element.append(player4Img);
+            break;
+        default:
+            break;
     }
 }
 function nextTurn() {
