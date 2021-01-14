@@ -63,8 +63,8 @@ class Player {
       this.y = y;
       movePlayerIcon(x,y,playerTurn);
       scores[playerTurn-1]++;
-      nextTurn();
       getBoard(x,y).claim();
+      nextTurn();
     } 
     else if (getBoard(x,y).claimedBy === playerTurn) {
       this.x = x;
@@ -212,6 +212,9 @@ class Cell {
     //players
     for (let i = 0; i < players.length; i++) {
       const p = <Player>players[i];
+      if (p === undefined) {
+        continue;
+      }
       if (p.x-this.x <= 1 && p.x-this.x >= -1 && p.y-this.y <= 1 && p.y-this.y >= -1) {
         p.resetLocation(i+1);
       }
@@ -465,3 +468,8 @@ function setDifficulty(num: number): void {
   console.log(num);
 }
 
+
+//end cards
+function checkEndStates(): void {
+  
+}
