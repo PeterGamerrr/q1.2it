@@ -49,7 +49,10 @@ var Player = /** @class */ (function () {
             (x === this.x - 1 && y === this.y) ||
             (x === this.x + 1 && y === this.y))) {
             getBoard(x, y).claim();
+            this.x = x;
+            this.y = y;
         }
+        nextTurn();
     };
     return Player;
 }());

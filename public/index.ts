@@ -52,9 +52,13 @@ class Player {
         (x === this.x+1 && y === this.y)
       )
     ){
-      getBoard(x,y).claim()
+      getBoard(x,y).claim();
+      this.x = x;
+      this.y = y;
     }
 
+
+    nextTurn();
   }
   
 }
