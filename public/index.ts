@@ -1,4 +1,4 @@
-console.log("v0.3.26");
+console.log("v0.4.0");
 
 //board game cell
 let root = document.documentElement;
@@ -10,6 +10,54 @@ let menuDifficulty = 0;
 let board: Cell[][];
 let playerTurn = 1;
 let scores = [0, 0, 0, 0];
+let players: player[];
+
+class player {
+  private _x: number;
+  private _y: number;
+  private _dead = false;
+
+  constructor(x: number, y:number) {
+    this._x = x;
+    this._y = y;
+  }
+
+  
+  public get x() : number {
+    return this._x;
+  }
+
+  public get y() : number {
+    return this._y;
+  }
+
+  public get dead() : boolean {
+    return this._dead;
+  }
+
+  public set x(x : number) {
+    this._x = x;
+  }
+  
+  public set y(y : number) {
+    this._y = y;
+  }
+
+  public move(x:number, y:number):void {
+    if (
+      getBoard(x,y).claimedBy == 0 && (
+        (x === this.x && y === this.y-1) || 
+        (x === this.x && y === this.y+1) || 
+        (x === this.x-1 && y === this.y) || 
+        (x === this.x+1 && y === this.y)
+      )
+    ){
+      getBoard(x,y).claim()
+    }
+
+  }
+  
+}
 
 class Cell {
   private _x: number;
@@ -104,6 +152,8 @@ class Cell {
   }
 }
 
+
+
 //board init
 function startGame(): void {
   boardSize = playerCount + menuBoardSize + 3;
@@ -146,11 +196,26 @@ function getBoard(x: number, y: number): Cell {
   }
 }
 
+function getCurrentPlayer(): player {
+  return players[playerTurn-1];
+}
+
 function setupStartPositions(): void {
   getBoard(0, 0).claim(1);
+  players[0] = new player(0,0);
   getBoard(0, boardSize - 1).claim(2);
-  getBoard(boardSize - 1, 0).claim(3);
-  getBoard(boardSize - 1, boardSize - 1).claim(4);
+  players[1] = new player(0,boardSize - 1);
+
+  if (playerCount >= 3) {
+    getBoard(boardSize - 1, 0).claim(3);
+    players[2] = new player(boardSize - 1, 0);
+  }
+
+  if (playerCount >= 4){
+    getBoard(boardSize - 1, boardSize - 1).claim(4);
+    players[3] = new player(boardSize - 1, boardSize - 1);
+  }
+  
 }
 
 function nextTurn(): void {
@@ -159,15 +224,11 @@ function nextTurn(): void {
   if (playerTurn > playerCount) {
     playerTurn = 1;
   }
+  if (getCurrentPlayer().dead)
   // console.log("new next turn: " + playerTurn) //log: turn after update
   updateContent();
 }
 
-function canMove(): boolean {
-  board.forEach((element) => {
-    element.forEach((cell) => {});
-  });
-}
 
 function updateContent(): void {
   //TODO: update content
