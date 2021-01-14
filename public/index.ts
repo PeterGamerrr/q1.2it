@@ -1,4 +1,4 @@
-console.log("v0.5.0");
+console.log("v0.5.6");
 
 //board game cell
 let root = document.documentElement;
@@ -16,10 +16,14 @@ let availableCells: number;
 class Player {
   private _x: number;
   private _y: number;
+  private _homeX: number;
+  private _homeY: number;
 
   constructor(x: number, y:number) {
     this._x = x;
     this._y = y;
+    this._homeX = x;
+    this._homeY = y;
   }
  
   public get x() : number {
@@ -36,6 +40,14 @@ class Player {
   
   public set y(y : number) {
     this._y = y;
+  }
+
+  public get homeX() : number {
+    return this._homeX;
+  }
+  
+  public get homeY() : number {
+    return this._homeY;
   }
 
   public move(x:number, y:number, force?: boolean): void {
@@ -61,6 +73,28 @@ class Player {
       nextTurn();
     }
     
+  }
+
+  public resetLocation(player: number) {
+    this.x = this.homeX;
+    this.y = this.homeY;
+    switch (player) {
+      case 1:
+        movePlayerIcon(this.homeX,this.homeY,1);
+        break;
+      case 2:
+        movePlayerIcon(this.homeX,this.homeY,2);
+        break;
+      case 3:
+        movePlayerIcon(this.homeX,this.homeY,3);
+        break;
+      case 4:
+        movePlayerIcon(this.homeX,this.homeY,4);
+        break;
+                
+      default:
+        break;
+    }
   }
   
 }
@@ -154,8 +188,7 @@ class Cell {
   public claim(player?: number): void {
     if (this.bomb === true) {
       this.explode()
-    }
-    if (player == undefined) {
+    } else if (player == undefined) {
       this.claimedBy = playerTurn;
       this.element.attr("c", playerTurn);
     } else {
@@ -166,6 +199,7 @@ class Cell {
 
   private explode(): void {
     console.log("BOOM X: " + this.x + " Y: " + this.y);
+    //claims
     this.resetCell();
     getBoard(this.x-1,this.y-1).resetCell();
     getBoard(this.x-1,this.y  ).resetCell();
@@ -175,6 +209,14 @@ class Cell {
     getBoard(this.x+1,this.y-1).resetCell();
     getBoard(this.x+1,this.y  ).resetCell();
     getBoard(this.x+1,this.y+1).resetCell();
+    //players
+    for (let i = 0; i < players.length; i++) {
+      const p = <Player>players[i];
+      if (p.x-this.x <= 1 && p.x-this.x >= -1 && p.y-this.y <= 1 && p.y-this.y >= -1) {
+        p.resetLocation(i+1);
+      }
+    }
+
   }
 
   private resetCell(): void {
@@ -422,3 +464,4 @@ function setDifficulty(num: number): void {
   menuDifficulty = num;
   console.log(num);
 }
+

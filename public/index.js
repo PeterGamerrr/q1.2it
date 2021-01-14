@@ -1,4 +1,4 @@
-console.log("v0.5.0");
+console.log("v0.5.6");
 //board game cell
 var root = document.documentElement;
 var playerCount = 2;
@@ -15,6 +15,8 @@ var Player = /** @class */ (function () {
     function Player(x, y) {
         this._x = x;
         this._y = y;
+        this._homeX = x;
+        this._homeY = y;
     }
     Object.defineProperty(Player.prototype, "x", {
         get: function () {
@@ -36,6 +38,20 @@ var Player = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(Player.prototype, "homeX", {
+        get: function () {
+            return this._homeX;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Player.prototype, "homeY", {
+        get: function () {
+            return this._homeY;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Player.prototype.move = function (x, y, force) {
         if ((getBoard(x, y).claimedBy === 0 && ((x === this.x && y === this.y - 1) ||
             (x === this.x && y === this.y + 1) ||
@@ -53,6 +69,26 @@ var Player = /** @class */ (function () {
             this.y = y;
             movePlayerIcon(x, y, playerTurn);
             nextTurn();
+        }
+    };
+    Player.prototype.resetLocation = function (player) {
+        this.x = this.homeX;
+        this.y = this.homeY;
+        switch (player) {
+            case 1:
+                movePlayerIcon(this.homeX, this.homeY, 1);
+                break;
+            case 2:
+                movePlayerIcon(this.homeX, this.homeY, 2);
+                break;
+            case 3:
+                movePlayerIcon(this.homeX, this.homeY, 3);
+                break;
+            case 4:
+                movePlayerIcon(this.homeX, this.homeY, 4);
+                break;
+            default:
+                break;
         }
     };
     return Player;
@@ -146,7 +182,7 @@ var Cell = /** @class */ (function () {
         if (this.bomb === true) {
             this.explode();
         }
-        if (player == undefined) {
+        else if (player == undefined) {
             this.claimedBy = playerTurn;
             this.element.attr("c", playerTurn);
         }
@@ -157,6 +193,7 @@ var Cell = /** @class */ (function () {
     };
     Cell.prototype.explode = function () {
         console.log("BOOM X: " + this.x + " Y: " + this.y);
+        //claims
         this.resetCell();
         getBoard(this.x - 1, this.y - 1).resetCell();
         getBoard(this.x - 1, this.y).resetCell();
@@ -166,6 +203,13 @@ var Cell = /** @class */ (function () {
         getBoard(this.x + 1, this.y - 1).resetCell();
         getBoard(this.x + 1, this.y).resetCell();
         getBoard(this.x + 1, this.y + 1).resetCell();
+        //players
+        for (var i = 0; i < players.length; i++) {
+            var p = players[i];
+            if (p.x - this.x <= 1 && p.x - this.x >= -1 && p.y - this.y <= 1 && p.y - this.y >= -1) {
+                p.resetLocation(i + 1);
+            }
+        }
     };
     Cell.prototype.resetCell = function () {
         if (this.claimedBy !== 0) {
