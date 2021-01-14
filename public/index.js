@@ -57,12 +57,12 @@ var Player = /** @class */ (function () {
             (x === this.x && y === this.y + 1) ||
             (x === this.x - 1 && y === this.y) ||
             (x === this.x + 1 && y === this.y))) || force === true) {
-            getBoard(x, y).claim();
             this.x = x;
             this.y = y;
             movePlayerIcon(x, y, playerTurn);
             scores[playerTurn - 1]++;
             nextTurn();
+            getBoard(x, y).claim();
         }
         else if (getBoard(x, y).claimedBy === playerTurn) {
             this.x = x;
@@ -193,6 +193,7 @@ var Cell = /** @class */ (function () {
     };
     Cell.prototype.explode = function () {
         console.log("BOOM X: " + this.x + " Y: " + this.y);
+        this.bomb = false;
         //claims
         this.resetCell();
         getBoard(this.x - 1, this.y - 1).resetCell();

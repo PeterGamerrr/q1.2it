@@ -59,12 +59,12 @@ class Player {
         (x === this.x+1 && y === this.y)
       )) || force === true
     ){
-      getBoard(x,y).claim();
       this.x = x;
       this.y = y;
       movePlayerIcon(x,y,playerTurn);
       scores[playerTurn-1]++;
       nextTurn();
+      getBoard(x,y).claim();
     } 
     else if (getBoard(x,y).claimedBy === playerTurn) {
       this.x = x;
@@ -100,7 +100,6 @@ class Player {
 }
 
 let players= [new Player(0,0),undefined,undefined,undefined];
-
 
 class Cell {
   private _x: number;
@@ -199,6 +198,7 @@ class Cell {
 
   private explode(): void {
     console.log("BOOM X: " + this.x + " Y: " + this.y);
+    this.bomb = false;
     //claims
     this.resetCell();
     getBoard(this.x-1,this.y-1).resetCell();
