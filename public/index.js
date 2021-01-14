@@ -1,4 +1,4 @@
-console.log("v0.4.16");
+console.log("v0.4.32");
 //board game cell
 var root = document.documentElement;
 var playerCount = 2;
@@ -178,7 +178,7 @@ player4Img.attr("src", "./playericons/speler4.png");
 //board init
 function startGame() {
     boardSize = playerCount + menuBoardSize + 3;
-    bombs = boardSize * boardSize * (menuDifficulty * 0.05 + 0.1);
+    bombs = Math.floor(boardSize * boardSize * (menuDifficulty * 0.05 + 0.1));
     // console.log("startup: " + bombs + " " + boardSize)
     $("main").empty();
     $("main").load("gameboard.html", function () {
@@ -219,19 +219,31 @@ function getCurrentPlayer() {
     return players[playerTurn - 1];
 }
 function setupStartPositions() {
+    //player1
     getBoard(0, 0).claim(1);
     // getBoard(0, 0).element.addClass("player1");
     getBoard(0, 0).element.append(player1Img);
-    getBoard(0, boardSize - 1).claim(2);
-    // getBoard(0, boardSize - 1).element.addClass("player2")
-    getBoard(0, boardSize - 1).element.append(player2Img);
-    players[1] = new Player(0, boardSize - 1);
+    //player2
+    if (playerCount === 2) {
+        getBoard(boardSize - 1, boardSize - 1).claim(2);
+        // getBoard(0, boardSize - 1).element.addClass("player2")
+        getBoard(boardSize - 1, boardSize - 1).element.append(player2Img);
+        players[1] = new Player(boardSize - 1, boardSize - 1);
+    }
+    else {
+        getBoard(0, boardSize - 1).claim(2);
+        // getBoard(0, boardSize - 1).element.addClass("player2")
+        getBoard(0, boardSize - 1).element.append(player2Img);
+        players[1] = new Player(0, boardSize - 1);
+    }
+    //player3
     if (playerCount >= 3) {
         getBoard(boardSize - 1, 0).claim(3);
         players[2] = new Player(boardSize - 1, 0);
         // getBoard(boardSize - 1, 0).element.addClass("player3")
         getBoard(boardSize - 1, 0).element.append(player3Img);
     }
+    //player4
     if (playerCount >= 4) {
         getBoard(boardSize - 1, boardSize - 1).claim(4);
         players[3] = new Player(boardSize - 1, boardSize - 1);
@@ -240,16 +252,49 @@ function setupStartPositions() {
     }
 }
 function generateBombs() {
-    while (bombs > 0) {
+    var maxtries = 500;
+    console.log("genBombs");
+    var bomb = bombs;
+    while (bomb > 0 && maxtries > 0) {
         var x = Math.floor(Math.random() * boardSize);
         var y = Math.floor(Math.random() * boardSize);
-        if (players[0].x - x > 1 && players[0].x - x < -1 &&
-            players[1].x - x > 1 && players[1].x - x < -1 &&
-            players[2].x - x > 1 && players[2].x - x < -1 &&
-            players[3].x - x > 1 && players[3].x - x < -1) {
-            getBoard(x, y).bomb = true;
-            bombs--;
+        if (canbomb(x, y)) {
+            getBoard(x, y)._bomb = true;
+            console.log("bomb created " + bomb + "/" + bombs + " x: " + x + " y: " + y);
+            bomb--;
         }
+        else {
+            console.log("bombs " + bomb + "/" + bombs + "  maxTries " + maxtries);
+        }
+        maxtries--;
+    }
+}
+function canbomb(x, y) {
+    switch (playerCount) {
+        case 2:
+            return !((players[0].x - x <= 1 && players[0].x - x >= -1 &&
+                players[0].y - y <= 1 && players[0].y - y >= -1) ||
+                (players[1].x - x <= 1 && players[1].x - x >= -1 &&
+                    players[1].y - y <= 1 && players[1].y - y >= -1));
+        case 3:
+            return !((players[0].x - x <= 1 && players[0].x - x >= -1 &&
+                players[0].y - y <= 1 && players[0].y - y >= -1) ||
+                (players[1].x - x <= 1 && players[1].x - x >= -1 &&
+                    players[1].y - y <= 1 && players[1].y - y >= -1) ||
+                (players[2].x - x <= 1 && players[2].x - x >= -1 &&
+                    players[2].y - y <= 1 && players[2].y - y >= -1));
+        case 4:
+            return !((players[0].x - x <= 1 && players[0].x - x >= -1 &&
+                players[0].y - y <= 1 && players[0].y - y >= -1) ||
+                (players[1].x - x <= 1 && players[1].x - x >= -1 &&
+                    players[1].y - y <= 1 && players[1].y - y >= -1) ||
+                (players[2].x - x <= 1 && players[2].x - x >= -1 &&
+                    players[2].y - y <= 1 && players[2].y - y >= -1) ||
+                (players[3].x - x <= 1 && players[3].x - x >= -1 &&
+                    players[3].y - y <= 1 && players[3].y - y >= -1));
+        default:
+            return false;
+            break;
     }
 }
 function movePlayerIcon(x, y, player) {
