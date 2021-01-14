@@ -130,7 +130,7 @@ function startGame(): void {
           let x = parseInt(<string>e.target.getAttribute("x"));
           let y = parseInt(<string>e.target.getAttribute("y"));
           // console.log(getBoard(x,y).element); //log: clicked target
-          getBoard(x, y).move();
+          getBoard(x, y).move(playerTurn);
         });
       }
     }
@@ -172,6 +172,8 @@ function canMove(): boolean {
 function updateContent(): void {
   //TODO: update content
 }
+
+
 
 //menu
 //players
