@@ -76,9 +76,14 @@ main {
     grid-template-rows: repeat(var(--boardsize), 1fr);
     grid-gap: 0.5rem;
     max-width: calc(500px + 2rem);
+    justify-content: auto;
 
     .cell {
       background: $black-70;
+      width: auto;
+      height: auto;
+      overflow: hidden;
+      justify-items: center;
 
       &[c="1"] {
         background-color: $firstPlayerColor;
@@ -138,3 +143,9 @@ div.bg-image {
   z-index: -1;
 }
 
+img.playerIcon {
+  max-width: 50px;
+  max-height: 50px;
+  padding: auto;
+  margin: auto;
+}

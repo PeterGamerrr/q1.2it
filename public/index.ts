@@ -1,4 +1,4 @@
-console.log("v0.4.11");
+console.log("v0.4.16");
 
 //board game cell
 let root = document.documentElement;
@@ -52,21 +52,13 @@ class Player {
       getBoard(x,y).claim();
       this.x = x;
       this.y = y;
-      getBoard(x,y-1).element.removeClass("player" + playerTurn);
-      getBoard(x,y+1).element.removeClass("player" + playerTurn);
-      getBoard(x-1,y).element.removeClass("player" + playerTurn);
-      getBoard(x+1,y).element.removeClass("player" + playerTurn);
-      getBoard(x,y).element.addClass("player" + playerTurn);
+      movePlayerIcon(x,y,playerTurn);
       nextTurn();
     } 
     else if (getBoard(x,y).claimedBy === playerTurn) {
       this.x = x;
       this.y = y;
-      getBoard(x,y-1).element.removeClass("player" + playerTurn);
-      getBoard(x,y+1).element.removeClass("player" + playerTurn);
-      getBoard(x-1,y).element.removeClass("player" + playerTurn);
-      getBoard(x+1,y).element.removeClass("player" + playerTurn);
-      getBoard(x,y).element.addClass("player" + playerTurn);
+      movePlayerIcon(x,y,playerTurn);
       nextTurn();
     }
     
@@ -181,6 +173,18 @@ class Cell {
   }
 }
 
+let player1Img = $("<img class='playerIcon' id='player1Img'/>");
+player1Img.attr("src", "./playericons/speler1.png");
+
+let player2Img = $("<img class='playerIcon' id='player2Img'/>");
+player2Img.attr("src", "./playericons/speler2.png");
+
+let player3Img = $("<img class='playerIcon' id='player3Img'/>");
+player3Img.attr("src", "./playericons/speler3.png");
+
+let player4Img = $("<img class='playerIcon' id='player4Img'/>");
+player4Img.attr("src", "./playericons/speler4.png");
+
 
 
 //board init
@@ -232,14 +236,10 @@ function getCurrentPlayer(): Player{
 function setupStartPositions(): void {
   getBoard(0, 0).claim(1);
   // getBoard(0, 0).element.addClass("player1");
-  let player1Img = $("<img id='player1Img'/>");
-  player1Img.attr("src", "./playericons/speler1.png");
   getBoard(0,0).element.append(player1Img);
 
   getBoard(0, boardSize - 1).claim(2);
   // getBoard(0, boardSize - 1).element.addClass("player2")
-  let player2Img = $("<img id='player2Img'/>");
-  player2Img.attr("src", "./playericons/speler2.png");
   getBoard(0,boardSize - 1).element.append(player2Img);
 
   players[1] = new Player(0,boardSize - 1);
@@ -248,9 +248,7 @@ function setupStartPositions(): void {
     getBoard(boardSize - 1, 0).claim(3);
     players[2] = new Player(boardSize - 1, 0);
     // getBoard(boardSize - 1, 0).element.addClass("player3")
-    let player3Img = $("<img id='player3Img'/>");
-    player3Img.attr("src", "./playericons/speler3.png");
-    getBoard(0,boardSize - 1).element.append(player3Img);
+    getBoard(boardSize - 1,0).element.append(player3Img);
 
 
   }
@@ -259,12 +257,29 @@ function setupStartPositions(): void {
     getBoard(boardSize - 1, boardSize - 1).claim(4);
     players[3] = new Player(boardSize - 1, boardSize - 1);
     // getBoard(boardSize - 1, 0).element.addClass("player4")
-    let player4Img = $("<img id='player4Img'/>");
-    player4Img.attr("src", "./playericons/speler4.png");
-    getBoard(0,boardSize - 1).element.append(player4Img);
+    getBoard(boardSize - 1,boardSize - 1).element.append(player4Img);
   
   }
-  
+}
+
+function movePlayerIcon(x: number, y: number, player: number) : void {
+  switch (player) {
+    case 1:
+      getBoard(x,y).element.append(player1Img);
+      break;
+    case 2:
+      getBoard(x,y).element.append(player2Img);
+      break;
+    case 3:
+      getBoard(x,y).element.append(player3Img);
+      break;
+    case 4:
+      getBoard(x,y).element.append(player4Img);
+      break;
+      
+    default:
+      break;
+  }
 }
 
 function nextTurn(): void {

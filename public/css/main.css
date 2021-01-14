@@ -82,10 +82,17 @@ main .gameboard {
       grid-template-rows: repeat(var(--boardsize), 1fr);
   grid-gap: 0.5rem;
   max-width: calc(500px + 2rem);
+  -webkit-box-pack: auto;
+      -ms-flex-pack: auto;
+          justify-content: auto;
 }
 
 main .gameboard .cell {
   background: rgba(0, 0, 0, 0.7);
+  width: auto;
+  height: auto;
+  overflow: hidden;
+  justify-items: center;
 }
 
 main .gameboard .cell[c="1"] {
@@ -113,5 +120,12 @@ div.bg-image {
   top: 0;
   left: 0;
   z-index: -1;
+}
+
+img.playerIcon {
+  max-width: 50px;
+  max-height: 50px;
+  padding: auto;
+  margin: auto;
 }
 /*# sourceMappingURL=main.css.map */

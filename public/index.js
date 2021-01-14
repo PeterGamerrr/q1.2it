@@ -173,6 +173,14 @@ var Cell = /** @class */ (function () {
     });
     return Cell;
 }());
+var player1Img = $("<img class='playerIcon' id='player1Img'/>");
+player1Img.attr("src", "./playericons/speler1.png");
+var player2Img = $("<img class='playerIcon' id='player2Img'/>");
+player2Img.attr("src", "./playericons/speler2.png");
+var player3Img = $("<img class='playerIcon' id='player3Img'/>");
+player3Img.attr("src", "./playericons/speler3.png");
+var player4Img = $("<img class='playerIcon' id='player4Img'/>");
+player4Img.attr("src", "./playericons/speler4.png");
 //board init
 function startGame() {
     boardSize = playerCount + menuBoardSize + 3;
@@ -218,30 +226,22 @@ function getCurrentPlayer() {
 function setupStartPositions() {
     getBoard(0, 0).claim(1);
     // getBoard(0, 0).element.addClass("player1");
-    var player1Img = $("<img id='player1Img'/>");
-    player1Img.attr("src", "./playericons/speler1.png");
     getBoard(0, 0).element.append(player1Img);
     getBoard(0, boardSize - 1).claim(2);
     // getBoard(0, boardSize - 1).element.addClass("player2")
-    var player2Img = $("<img id='player2Img'/>");
-    player2Img.attr("src", "./playericons/speler2.png");
     getBoard(0, boardSize - 1).element.append(player2Img);
     players[1] = new Player(0, boardSize - 1);
     if (playerCount >= 3) {
         getBoard(boardSize - 1, 0).claim(3);
         players[2] = new Player(boardSize - 1, 0);
         // getBoard(boardSize - 1, 0).element.addClass("player3")
-        var player3Img = $("<img id='player3Img'/>");
-        player3Img.attr("src", "./playericons/speler3.png");
-        getBoard(0, boardSize - 1).element.append(player3Img);
+        getBoard(boardSize - 1, 0).element.append(player3Img);
     }
     if (playerCount >= 4) {
         getBoard(boardSize - 1, boardSize - 1).claim(4);
         players[3] = new Player(boardSize - 1, boardSize - 1);
         // getBoard(boardSize - 1, 0).element.addClass("player4")
-        var player4Img = $("<img id='player4Img'/>");
-        player4Img.attr("src", "./playericons/speler4.png");
-        getBoard(0, boardSize - 1).element.append(player4Img);
+        getBoard(boardSize - 1, boardSize - 1).element.append(player4Img);
     }
 }
 function nextTurn() {
