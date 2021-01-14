@@ -9,7 +9,7 @@ var bombsExploded;
 var menuDifficulty = 0;
 var board;
 var playerTurn = 1;
-var scores = [0, 0, 0, 0];
+var scores = [1, 1, 1, 1];
 var Player = /** @class */ (function () {
     function Player(x, y) {
         this._x = x;
@@ -44,6 +44,7 @@ var Player = /** @class */ (function () {
             this.x = x;
             this.y = y;
             movePlayerIcon(x, y, playerTurn);
+            scores[playerTurn - 1]++;
             nextTurn();
         }
         else if (getBoard(x, y).claimedBy === playerTurn) {
@@ -155,6 +156,7 @@ var Cell = /** @class */ (function () {
     };
     Cell.prototype.explode = function () {
         //TODO: make explosion
+        console.log("BOOM");
     };
     Object.defineProperty(Cell.prototype, "element", {
         get: function () {
@@ -202,6 +204,7 @@ function startGame() {
             }
         }
         setupStartPositions();
+        generateBombs();
     });
 }
 function getBoard(x, y) {
@@ -234,6 +237,19 @@ function setupStartPositions() {
         players[3] = new Player(boardSize - 1, boardSize - 1);
         // getBoard(boardSize - 1, 0).element.addClass("player4")
         getBoard(boardSize - 1, boardSize - 1).element.append(player4Img);
+    }
+}
+function generateBombs() {
+    while (bombs > 0) {
+        var x = Math.floor(Math.random() * boardSize);
+        var y = Math.floor(Math.random() * boardSize);
+        if (players[0].x - x > 1 && players[0].x - x < -1 &&
+            players[1].x - x > 1 && players[1].x - x < -1 &&
+            players[2].x - x > 1 && players[2].x - x < -1 &&
+            players[3].x - x > 1 && players[3].x - x < -1) {
+            getBoard(x, y).bomb = true;
+            bombs--;
+        }
     }
 }
 function movePlayerIcon(x, y, player) {

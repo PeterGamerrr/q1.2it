@@ -10,7 +10,7 @@ let bombsExploded: number;
 let menuDifficulty = 0;
 let board: Cell[][];
 let playerTurn = 1;
-let scores = [0, 0, 0, 0];
+let scores = [1, 1, 1, 1];
 
 class Player {
   private _x: number;
@@ -53,6 +53,7 @@ class Player {
       this.x = x;
       this.y = y;
       movePlayerIcon(x,y,playerTurn);
+      scores[playerTurn-1]++;
       nextTurn();
     } 
     else if (getBoard(x,y).claimedBy === playerTurn) {
@@ -166,6 +167,7 @@ class Cell {
 
   private explode() {
     //TODO: make explosion
+    console.log("BOOM");
   }
 
   public get element(): JQuery {
@@ -218,6 +220,7 @@ function startGame(): void {
       }
     }
     setupStartPositions();
+    generateBombs()
   });
 }
 
@@ -249,8 +252,6 @@ function setupStartPositions(): void {
     players[2] = new Player(boardSize - 1, 0);
     // getBoard(boardSize - 1, 0).element.addClass("player3")
     getBoard(boardSize - 1,0).element.append(player3Img);
-
-
   }
 
   if (playerCount >= 4){
@@ -258,7 +259,22 @@ function setupStartPositions(): void {
     players[3] = new Player(boardSize - 1, boardSize - 1);
     // getBoard(boardSize - 1, 0).element.addClass("player4")
     getBoard(boardSize - 1,boardSize - 1).element.append(player4Img);
-  
+  }
+}
+
+function generateBombs(): void {
+  while (bombs > 0) {
+    let x = Math.floor(Math.random()*boardSize)
+    let y = Math.floor(Math.random()*boardSize)
+    if(
+      (<Player>players[0]).x-x > 1 && (<Player>players[0]).x-x < -1 &&
+      (<Player>players[1]).x-x > 1 && (<Player>players[1]).x-x < -1 &&
+      (<Player>players[2]).x-x > 1 && (<Player>players[2]).x-x < -1 &&
+      (<Player>players[3]).x-x > 1 && (<Player>players[3]).x-x < -1
+    ) {
+      getBoard(x,y).bomb = true;
+      bombs--;
+    }
   }
 }
 
