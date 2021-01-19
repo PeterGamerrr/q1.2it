@@ -129,8 +129,25 @@ img.playerIcon {
   margin: auto;
 }
 
-.endCard {
+.endCardWrapper {
   position: fixed;
-  padding: auto;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+}
+
+.endCardWrapper .endCard {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 15px;
+}
+
+.endCardWrapper .endCard .confetti {
+  background: url("../images/win.gif");
+  padding: 2rem;
+  margin: 3rem 0;
 }
 /*# sourceMappingURL=main.css.map */

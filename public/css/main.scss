@@ -150,8 +150,24 @@ img.playerIcon {
   margin: auto;
 }
 
-.endCard {
+.endCardWrapper {
   position: fixed;
-  padding: auto;
+  top:0;
+  left: 0;
+  background: $black-70;
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  .endCard {
+      padding: 20px;
+      background: $white;
+      border-radius: 15px;
+
+      .confetti{
+          background: url("../images/win.gif");
+          padding: 2rem;
+          margin: 3rem 0;
+      }
+  }
 }
 

@@ -123,7 +123,7 @@ var Cell = /** @class */ (function () {
             return this._bomb;
         },
         set: function (value) {
-            this._bomb;
+            this._bomb = value;
         },
         enumerable: false,
         configurable: true
@@ -185,10 +185,12 @@ var Cell = /** @class */ (function () {
         else if (player == undefined) {
             this.claimedBy = playerTurn;
             this.element.attr("c", playerTurn);
+            availableCells--;
         }
         else {
             this.claimedBy = player;
             this.element.attr("c", player);
+            availableCells--;
         }
     };
     Cell.prototype.explode = function () {
@@ -243,6 +245,7 @@ player4Img.attr("src", "./playericons/speler4.png");
 function startGame() {
     boardSize = playerCount + menuBoardSize + 3;
     bombs = Math.floor(boardSize * boardSize * (menuDifficulty * 0.05 + 0.1));
+    availableCells = boardSize * boardSize;
     // console.log("startup: " + bombs + " " + boardSize)
     $("main").empty();
     $("main").load("gameboard.html", function () {

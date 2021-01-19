@@ -1,10 +1,10 @@
-<div class="container">
+<div class="container" onmouseover="printCurrentPlayer(currentPlayer),printScorePLayerOne(scorePlayerOne)">
   <div class="row">
     <div class="col-12">
       <h1 class="header">Colomb</h1>
     </div>
     <div class="col-12">
-      <h3>{Current player} is aan de beurt</h3>
+      <h3>Speler <span id="currentPlayer"></span> is aan de beurt</h3>
     </div>
   </div>
   <div class="row">
@@ -12,7 +12,7 @@
       <h3 class="sideboardTitle">Score</h3>
 
       <p class="firstPlayer">Speler 1:</p>
-      <p>{first player Score} punt(en)</p>
+      <p><span id="scorePlayerOne"></span> punt(en)</p>
 
       <p class="secondPlayer">Speler 2:</p>
       <p>{second player Score} punt(en)</p>
@@ -35,8 +35,29 @@
     </div>
   </div>
 </div>
-<div class="endCard" style="display:none;">
-  <h1>We hebben een winnaar</h1>
-  <p><b>Speler #</b></p>
-  <p>heeft gewonnen</p>
+<div class="fluid-container endCardWrapper d-flex align-items-center justify-content-center" style="display: none !important;">
+  <div class="col-8 endCard">
+      <h1>We hebben een winnaar!</h1>
+      <p>Speler {number} heeft gewonnen</p>
+      <div class="confetti">
+          <img src="./playericons/speler1.png">
+      </div>
+      <div class="row d-flex justify-content-center">
+          <div class="col-6">
+              <button>Ga terug naar de startpagina</button>
+          </div>
+      </div>
+  </div>
 </div>
+
+
+<script>
+  function printCurrentPlayer(id) {
+    id.innerHTML = playerTurn;
+  }
+
+  function printScorePlayerOne(id) {
+    id.innerHTML = score[3];
+  }
+  
+  </script>

@@ -124,7 +124,7 @@ class Cell {
   }
 
   public set bomb(value: boolean) {
-    this._bomb;
+    this._bomb = value;
   }
 
   public get bomb(): boolean {
@@ -190,9 +190,11 @@ class Cell {
     } else if (player == undefined) {
       this.claimedBy = playerTurn;
       this.element.attr("c", playerTurn);
+      availableCells--;
     } else {
       this.claimedBy = player;
       this.element.attr("c", player);
+      availableCells--;
     }
   }
 
@@ -254,6 +256,7 @@ player4Img.attr("src", "./playericons/speler4.png");
 function startGame(): void {
   boardSize = playerCount + menuBoardSize + 3;
   bombs = Math.floor(boardSize * boardSize * (menuDifficulty * 0.05 + 0.1));
+  availableCells = boardSize*boardSize;
 
   // console.log("startup: " + bombs + " " + boardSize)
   $("main").empty();
