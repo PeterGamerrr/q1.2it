@@ -71,8 +71,7 @@ class Player {
       this.y = y;
       movePlayerIcon(x,y,playerTurn);
       nextTurn();
-    }
-    
+    }  
   }
 
   public resetLocation(player: number) {
