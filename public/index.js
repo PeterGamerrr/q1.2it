@@ -393,6 +393,7 @@ function nextTurn() {
     // console.log("new next turn: " + playerTurn) //log: turn after update
     updateContent();
     console.log(playerTurn);
+    checkEndStates();
 }
 function updateContent() {
     //TODO: update content
@@ -427,6 +428,10 @@ function setDifficulty(num) {
 }
 //end cards
 function checkEndStates() {
+    if (availableCells <= bombs - bombsExploded || availableCells === 0) {
+        var winPlayer = scores.indexOf(Math.max.apply(Math, scores));
+        showEndCard(winPlayer);
+    }
 }
 function showEndCard(num) {
     $("#winmessage").html("Speler " + num + " heeft gewonnen");

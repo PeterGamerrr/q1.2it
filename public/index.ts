@@ -447,6 +447,7 @@ function nextTurn(): void {
   // console.log("new next turn: " + playerTurn) //log: turn after update
   updateContent();
   console.log(playerTurn);
+  checkEndStates()
 }
 
 function updateContent(): void {
@@ -463,7 +464,6 @@ function setMenuPlayerCount(num: number): void {
   $("#playerbutton3").removeClass("active");
   $("#playerbutton4").removeClass("active");
   $("#playerbutton" + num).addClass("active");
-
 }
 
 //size
@@ -489,11 +489,14 @@ function setDifficulty(num: number): void {
 
 //end cards
 function checkEndStates(): void {
-
+  if (availableCells <= bombs-bombsExploded || availableCells === 0 ) {
+    let winPlayer = scores.indexOf(Math.max(...scores));
+    showEndCard(winPlayer);
+  }
 }
 
 function showEndCard(num: number): void {
-  $("#winmessage").html("Speler "+ num + " heeft gewonnen") 
+  $("#winmessage").html("Speler "+ (num+1) + " heeft gewonnen") 
   $("#winimg").attr("src", "./playericons/speler" + num + ".png");
   $(".endCardWrapper").show();
 }
