@@ -150,4 +150,8 @@ img.playerIcon {
   padding: 2rem;
   margin: 3rem 0;
 }
+
+.active {
+  background-color: orange;
+}
 /*# sourceMappingURL=main.css.map */

@@ -218,10 +218,11 @@ var Cell = /** @class */ (function () {
         }
     };
     Cell.prototype.resetCell = function () {
-        if (this.claimedBy !== 0) {
+        if (this.claimedBy != 0) {
             scores[this.claimedBy - 1]--;
             availableCells++;
             this.claimedBy = 0;
+            console.log(scores[this.claimedBy - 1] + " " + availableCells);
         }
     };
     Object.defineProperty(Cell.prototype, "element", {
@@ -400,16 +401,28 @@ function updateContent() {
 function setMenuPlayerCount(num) {
     playerCount = num;
     console.log(num);
+    $("#playerbutton2").removeClass("active");
+    $("#playerbutton3").removeClass("active");
+    $("#playerbutton4").removeClass("active");
+    $("#playerbutton" + num).addClass("active");
 }
 //size
 function setMenuBoardSize(num) {
     menuBoardSize = num;
     console.log(num);
+    $("#sizebutton0").removeClass("active");
+    $("#sizebutton1").removeClass("active");
+    $("#sizebutton2").removeClass("active");
+    $("#sizebutton" + num).addClass("active");
 }
 //difficulty
 function setDifficulty(num) {
     menuDifficulty = num;
     console.log(num);
+    $("#difficultybutton0").removeClass("active");
+    $("#difficultybutton1").removeClass("active");
+    $("#difficultybutton2").removeClass("active");
+    $("#difficultybutton" + num).addClass("active");
 }
 //end cards
 function checkEndStates() {

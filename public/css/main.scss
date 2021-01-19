@@ -25,6 +25,7 @@ main {
     border-radius: 4rem;
     font-size: 1.2rem;
     width: 100%;
+    
   }
   div.row {
     padding: 1rem 0;
@@ -171,3 +172,6 @@ img.playerIcon {
   }
 }
 
+.active {
+  background-color: orange;
+}
