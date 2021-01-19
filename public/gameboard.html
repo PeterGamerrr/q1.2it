@@ -38,13 +38,13 @@
 <div class="fluid-container endCardWrapper d-flex align-items-center justify-content-center" style="display: none !important;">
   <div class="col-8 endCard">
       <h1>We hebben een winnaar!</h1>
-      <p>Speler {number} heeft gewonnen</p>
+      <p id="winmessage">Speler {number} heeft gewonnen</p>
       <div class="confetti">
-          <img src="./playericons/speler1.png">
+          <img id="winimg" src="./playericons/speler1.png">
       </div>
       <div class="row d-flex justify-content-center">
           <div class="col-6">
-              <button>Ga terug naar de startpagina</button>
+              <button onclick=" location.reload(); ">Ga terug naar de startpagina</button>
           </div>
       </div>
   </div>

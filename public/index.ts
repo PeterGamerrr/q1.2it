@@ -1,4 +1,4 @@
-console.log("v0.6.0");
+console.log("v0.6.15");
 
 //board game cell
 let root = document.documentElement;
@@ -6,7 +6,7 @@ let playerCount = 2;
 let menuBoardSize = 0;
 let boardSize: number;
 let bombs: number;
-let bombsExploded: number;
+let bombsExploded = 0;
 let menuDifficulty = 0;
 let board: Cell[][];
 let playerTurn = 1;
@@ -202,6 +202,7 @@ class Cell {
     console.log("BOOM X: " + this.x + " Y: " + this.y);
     this.bomb = false;
     //claims
+    bombsExploded++;
     this.resetCell();
     getBoard(this.x-1,this.y-1).resetCell();
     getBoard(this.x-1,this.y  ).resetCell();
@@ -489,4 +490,10 @@ function setDifficulty(num: number): void {
 //end cards
 function checkEndStates(): void {
 
+}
+
+function showEndCard(num: number): void {
+  $("#winmessage").html("Speler "+ num + " heeft gewonnen") 
+  $("#winimg").attr("src", "./playericons/speler" + num + ".png");
+  $(".endCardWrapper").show();
 }
