@@ -327,6 +327,8 @@ class Cell {
           p.resetLocation(i + 1);
         }
       }
+      contentHandler.update('explodedBombAmount', bombsExploded + '');
+      contentHandler.update("liveBombAmount", bombs - bombsExploded + "");
     });
   }
 
