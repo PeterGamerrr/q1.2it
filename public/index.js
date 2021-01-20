@@ -480,13 +480,15 @@ function nextTurn() {
         playerTurn = 1;
     }
     // console.log("new next turn: " + playerTurn) //log: turn after update
-    updateContent(playerTurn, scores);
+    updateContent(playerTurn, scores, bombs - bombsExploded, bombsExploded);
     console.log(playerTurn);
     checkEndStates();
 }
-function updateContent(turnOfPlayer, currentScores) {
+function updateContent(turnOfPlayer, currentScores, liveBombs, bombsExploded) {
     contentHandler.update("currentPlayer", turnOfPlayer + "");
     currentScores.forEach((score, player) => contentHandler.update(`scorePlayer${player + 1}`, score + ""));
+    contentHandler.update('explodedBombAmount', bombsExploded + '');
+    contentHandler.update("liveBombAmount", liveBombs + "");
 }
 //menu
 //players
