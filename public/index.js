@@ -1,62 +1,128 @@
+"use strict";
+const EVENTS = {
+    update: "update-element",
+};
+const ContentHandler = () => {
+    const hookName = "data-for";
+    const updateInnerText = (element, text) => {
+        try {
+            element.innerText = text;
+            return element;
+        }
+        catch (error) {
+            throw new Error(`updateContent - ${error}`);
+        }
+    };
+    const handleUpdate = (element, elementHook) => (ev) => {
+        if (ev.detail.hook === elementHook) {
+            return updateInnerText(element, ev.detail.text);
+        }
+        else
+            return undefined;
+    };
+    const mapElementsToHooks = (elements) => {
+        try {
+            const mappedElements = elements.map((e) => [
+                e.getAttribute(hookName) || "ERROR",
+                e,
+            ]);
+            return mappedElements;
+        }
+        catch (error) {
+            throw new Error(`mapElementsToHooks - ${error}`);
+        }
+    };
+    const injectListeners = (mappedElements) => {
+        try {
+            const remover = mappedElements.map(([attrib, element]) => {
+                const handler = handleUpdate(element, attrib);
+                document.addEventListener(EVENTS.update, handler);
+                return [
+                    attrib,
+                    () => document.removeEventListener(EVENTS.update, handler),
+                ];
+            });
+            return new Map(remover);
+        }
+        catch (error) {
+            throw new Error(`injectListeners - ${error}`);
+        }
+    };
+    const dispatchUpdate = (hook, text) => {
+        try {
+            const ev = new CustomEvent(EVENTS.update, {
+                detail: { hook, text },
+            });
+            document.dispatchEvent(ev);
+            return;
+        }
+        catch (error) {
+            throw new Error(`dispatchUpdate - ${error}`);
+        }
+    };
+    return (() => {
+        const update = (hook, text) => dispatchUpdate(hook, text);
+        const inject = () => {
+            const _listenerElements = Array.from(document.querySelectorAll(`[${hookName}]`));
+            const _mappedElements = mapElementsToHooks(_listenerElements);
+            const _remover = injectListeners(_mappedElements);
+            const removeListener = (hook) => {
+                const match = _remover.get(hook);
+                if (match) {
+                    return match();
+                }
+            };
+            return removeListener;
+        };
+        return { update, inject };
+    })();
+};
 console.log("v0.6.15");
 //board game cell
-var root = document.documentElement;
-var playerCount = 2;
-var menuBoardSize = 0;
-var boardSize;
-var bombs;
-var bombsExploded = 0;
-var menuDifficulty = 0;
-var board;
-var playerTurn = 1;
-var scores = [1, 1, 1, 1];
-var availableCells;
-var Player = /** @class */ (function () {
-    function Player(x, y) {
+let root = document.documentElement;
+let playerCount = 2;
+let menuBoardSize = 0;
+let boardSize;
+let bombs;
+let bombsExploded = 0;
+let menuDifficulty = 0;
+let board;
+let playerTurn = 1;
+let scores = [1, 1, 1, 1];
+let availableCells = 0;
+const contentHandler = ContentHandler();
+class Player {
+    constructor(x, y) {
         this._x = x;
         this._y = y;
         this._homeX = x;
         this._homeY = y;
     }
-    Object.defineProperty(Player.prototype, "x", {
-        get: function () {
-            return this._x;
-        },
-        set: function (x) {
-            this._x = x;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Player.prototype, "y", {
-        get: function () {
-            return this._y;
-        },
-        set: function (y) {
-            this._y = y;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Player.prototype, "homeX", {
-        get: function () {
-            return this._homeX;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Player.prototype, "homeY", {
-        get: function () {
-            return this._homeY;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Player.prototype.move = function (x, y, force) {
-        if ((getBoard(x, y).claimedBy === 0 && ((x === this.x && y === this.y - 1) ||
-            (x === this.x && y === this.y + 1) ||
-            (x === this.x - 1 && y === this.y) ||
-            (x === this.x + 1 && y === this.y))) || force === true) {
+    get x() {
+        return this._x;
+    }
+    get y() {
+        return this._y;
+    }
+    set x(x) {
+        this._x = x;
+    }
+    set y(y) {
+        this._y = y;
+    }
+    get homeX() {
+        return this._homeX;
+    }
+    get homeY() {
+        return this._homeY;
+    }
+    move(x, y, force) {
+        if ((getBoard(x, y).claimedBy === 0 &&
+            ((x === this.x && y === this.y - 1) ||
+                (x === this.x && y === this.y + 1) ||
+                (x === this.x - 1 && y === this.y) ||
+                (x === this.x + 1 && y === this.y))) ||
+            force === true) {
             this.x = x;
             this.y = y;
             movePlayerIcon(x, y, playerTurn);
@@ -70,8 +136,8 @@ var Player = /** @class */ (function () {
             movePlayerIcon(x, y, playerTurn);
             nextTurn();
         }
-    };
-    Player.prototype.resetLocation = function (player) {
+    }
+    resetLocation(player) {
         this.x = this.homeX;
         this.y = this.homeY;
         switch (player) {
@@ -90,12 +156,11 @@ var Player = /** @class */ (function () {
             default:
                 break;
         }
-    };
-    return Player;
-}());
-var players = [new Player(0, 0), undefined, undefined, undefined];
-var Cell = /** @class */ (function () {
-    function Cell(x, y, claimable) {
+    }
+}
+let players = [new Player(0, 0), undefined, undefined, undefined];
+class Cell {
+    constructor(x, y, claimable) {
         this._bomb = false;
         this._claimable = true;
         this._x = x;
@@ -104,51 +169,31 @@ var Cell = /** @class */ (function () {
             this._claimable = claimable;
         }
     }
-    Object.defineProperty(Cell.prototype, "x", {
-        get: function () {
-            return this._x;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Cell.prototype, "y", {
-        get: function () {
-            return this._y;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Cell.prototype, "bomb", {
-        get: function () {
-            return this._bomb;
-        },
-        set: function (value) {
-            this._bomb = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Cell.prototype, "claimedBy", {
-        get: function () {
-            return parseInt(this.element.attr("c"));
-        },
-        set: function (value) {
-            this.element.attr("c", value);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Cell.prototype, "claimable", {
-        get: function () {
-            return this._claimable;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    get x() {
+        return this._x;
+    }
+    get y() {
+        return this._y;
+    }
+    set bomb(value) {
+        this._bomb = value;
+    }
+    get bomb() {
+        return this._bomb;
+    }
+    get claimedBy() {
+        return parseInt(this.element.attr("c"));
+    }
+    set claimedBy(value) {
+        this.element.attr("c", value);
+    }
+    get claimable() {
+        return this._claimable;
+    }
     /**
      * @deprecated since version 4.10
      */
-    Cell.prototype.move = function (player) {
+    move(player) {
         // console.log({ //log: required conditions for moving
         //     "x-1":getBoard(this.x-1, this.y)  .element,
         //     "y-1":getBoard(this.x,   this.y-1).element,
@@ -166,82 +211,97 @@ var Cell = /** @class */ (function () {
             this.claim();
             nextTurn();
         }
-    };
+    }
     /**
-      * @deprecated since version 4.10
-      */
-    Cell.prototype.canMoveHere = function (player) {
+     * @deprecated since version 4.10
+     */
+    canMoveHere(player) {
         return (this.claimedBy === 0 &&
             this.claimable === true &&
             (getBoard(this.x - 1, this.y).claimedBy === playerTurn ||
                 getBoard(this.x, this.y - 1).claimedBy === playerTurn ||
                 getBoard(this.x + 1, this.y).claimedBy === playerTurn ||
                 getBoard(this.x, this.y + 1).claimedBy === playerTurn));
-    };
-    Cell.prototype.claim = function (player) {
+    }
+    claim(player) {
+        const currentPlayerNumber = player !== undefined ? player : playerTurn;
+        this.claimedBy = currentPlayerNumber;
+        this.element.attr("c", currentPlayerNumber);
+        availableCells--;
         if (this.bomb === true) {
             this.explode();
         }
-        else if (player == undefined) {
-            this.claimedBy = playerTurn;
-            this.element.attr("c", playerTurn);
-            availableCells--;
+    }
+    async handleExplosion() {
+        try {
+            const explodingElement = this.element;
+            const img = document.createElement("img");
+            img.src = "/images/explosion.gif";
+            img.classList.add("exploded");
+            explodingElement.append(img);
+            if (root) {
+                root.style.pointerEvents = "none";
+            }
+            const promise = new Promise((resolve) => {
+                setTimeout(resolve, 1200);
+            });
+            await promise;
+            img.remove();
+            root.style.pointerEvents = "auto";
         }
-        else {
-            this.claimedBy = player;
-            this.element.attr("c", player);
-            availableCells--;
+        catch (error) {
+            throw new Error(`handleExplosion - ${error}`);
         }
-    };
-    Cell.prototype.explode = function () {
+    }
+    explode() {
         console.log("BOOM X: " + this.x + " Y: " + this.y);
-        this.bomb = false;
-        //claims
-        bombsExploded++;
-        this.resetCell();
-        getBoard(this.x - 1, this.y - 1).resetCell();
-        getBoard(this.x - 1, this.y).resetCell();
-        getBoard(this.x - 1, this.y + 1).resetCell();
-        getBoard(this.x, this.y - 1).resetCell();
-        getBoard(this.x, this.y + 1).resetCell();
-        getBoard(this.x + 1, this.y - 1).resetCell();
-        getBoard(this.x + 1, this.y).resetCell();
-        getBoard(this.x + 1, this.y + 1).resetCell();
-        //players
-        for (var i = 0; i < players.length; i++) {
-            var p = players[i];
-            if (p === undefined) {
-                continue;
+        this.handleExplosion().then(() => {
+            this.bomb = false;
+            //claims
+            bombsExploded++;
+            this.resetCell();
+            getBoard(this.x - 1, this.y - 1).resetCell();
+            getBoard(this.x - 1, this.y).resetCell();
+            getBoard(this.x - 1, this.y + 1).resetCell();
+            getBoard(this.x, this.y - 1).resetCell();
+            getBoard(this.x, this.y + 1).resetCell();
+            getBoard(this.x + 1, this.y - 1).resetCell();
+            getBoard(this.x + 1, this.y).resetCell();
+            getBoard(this.x + 1, this.y + 1).resetCell();
+            //players
+            for (let i = 0; i < players.length; i++) {
+                const p = players[i];
+                if (p === undefined) {
+                    continue;
+                }
+                if (p.x - this.x <= 1 &&
+                    p.x - this.x >= -1 &&
+                    p.y - this.y <= 1 &&
+                    p.y - this.y >= -1) {
+                    p.resetLocation(i + 1);
+                }
             }
-            if (p.x - this.x <= 1 && p.x - this.x >= -1 && p.y - this.y <= 1 && p.y - this.y >= -1) {
-                p.resetLocation(i + 1);
-            }
-        }
-    };
-    Cell.prototype.resetCell = function () {
-        if (this.claimedBy != 0) {
+        });
+    }
+    resetCell() {
+        if (this.claimedBy !== 0 && !isNaN(this.claimedBy)) {
             scores[this.claimedBy - 1]--;
             availableCells++;
             this.claimedBy = 0;
             console.log(scores[this.claimedBy - 1] + " " + availableCells);
         }
-    };
-    Object.defineProperty(Cell.prototype, "element", {
-        get: function () {
-            return $(".cell[x='" + this.x + "'][y='" + this.y + "']");
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Cell;
-}());
-var player1Img = $("<img class='playerIcon' id='player1Img'/>");
+    }
+    get element() {
+        return $(".cell[x='" + this.x + "'][y='" + this.y + "']");
+    }
+}
+let player1Img = $("<img class='playerIcon' id='player1Img'/>");
 player1Img.attr("src", "./playericons/speler1.png");
-var player2Img = $("<img class='playerIcon' id='player2Img'/>");
+let player2Img = $("<img class='playerIcon' id='player2Img'/>");
 player2Img.attr("src", "./playericons/speler2.png");
-var player3Img = $("<img class='playerIcon' id='player3Img'/>");
+let player3Img = $("<img class='playerIcon' id='player3Img'/>");
 player3Img.attr("src", "./playericons/speler3.png");
-var player4Img = $("<img class='playerIcon' id='player4Img'/>");
+let player4Img = $("<img class='playerIcon' id='player4Img'/>");
 player4Img.attr("src", "./playericons/speler4.png");
 //board init
 function startGame() {
@@ -250,23 +310,23 @@ function startGame() {
     availableCells = boardSize * boardSize;
     // console.log("startup: " + bombs + " " + boardSize)
     $("main").empty();
-    $("main").load("gameboard.html", function () {
-        var gameBoard = $(".gameboard");
+    $("main").load("gameboard.html", () => {
+        let gameBoard = $(".gameboard");
         root.style.setProperty("--boardsize", boardSize + "");
         board = [];
-        for (var i = 0; i < boardSize; i++) {
+        for (let i = 0; i < boardSize; i++) {
             board[i] = [];
-            for (var j = 0; j < boardSize; j++) {
+            for (let j = 0; j < boardSize; j++) {
                 board[i][j] = new Cell(i, j);
-                var cell = document.createElement("div");
+                let cell = document.createElement("div");
                 cell.classList.add("cell");
                 cell.setAttribute("x", i + "");
                 cell.setAttribute("y", j + "");
                 cell.setAttribute("c", 0 + "");
                 gameBoard.append(cell);
-                $(".cell[x='" + i + "'][y='" + j + "']").on("click", function (e) {
-                    var x = parseInt(e.target.getAttribute("x"));
-                    var y = parseInt(e.target.getAttribute("y"));
+                $(".cell[x='" + i + "'][y='" + j + "']").on("click", (e) => {
+                    let x = parseInt(e.target.getAttribute("x"));
+                    let y = parseInt(e.target.getAttribute("y"));
                     // console.log(getBoard(x,y).element); //log: clicked target
                     getCurrentPlayer().move(x, y);
                 });
@@ -274,6 +334,8 @@ function startGame() {
         }
         setupStartPositions();
         generateBombs();
+        contentHandler.inject();
+        contentHandler.update("currentPlayer", playerTurn + "");
     });
 }
 function getBoard(x, y) {
@@ -321,12 +383,12 @@ function setupStartPositions() {
     }
 }
 function generateBombs() {
-    var maxtries = 500;
+    let maxtries = 500;
     console.log("genBombs");
-    var bomb = bombs;
+    let bomb = bombs;
     while (bomb > 0 && maxtries > 0) {
-        var x = Math.floor(Math.random() * boardSize);
-        var y = Math.floor(Math.random() * boardSize);
+        let x = Math.floor(Math.random() * boardSize);
+        let y = Math.floor(Math.random() * boardSize);
         if (canbomb(x, y)) {
             getBoard(x, y)._bomb = true;
             console.log("bomb created " + bomb + "/" + bombs + " x: " + x + " y: " + y);
@@ -339,28 +401,55 @@ function generateBombs() {
     }
 }
 function canbomb(x, y) {
+    // const getStartingPoint = (player: Player) =>
+    //   player.x - x <= 1 &&
+    //   player.x - x >= -1 &&
+    //   player.y - y <= 1 &&
+    //   player.y - y >= -1;
+    // return (Array(playerCount)
+    //   .fill(null)
+    //   .map((_, idx) => players[idx])
+    //   .filter((p) => p !== undefined) as Player[]).every(getStartingPoint);
     switch (playerCount) {
         case 2:
-            return !((players[0].x - x <= 1 && players[0].x - x >= -1 &&
-                players[0].y - y <= 1 && players[0].y - y >= -1) ||
-                (players[1].x - x <= 1 && players[1].x - x >= -1 &&
-                    players[1].y - y <= 1 && players[1].y - y >= -1));
+            return !((players[0].x - x <= 1 &&
+                players[0].x - x >= -1 &&
+                players[0].y - y <= 1 &&
+                players[0].y - y >= -1) ||
+                (players[1].x - x <= 1 &&
+                    players[1].x - x >= -1 &&
+                    players[1].y - y <= 1 &&
+                    players[1].y - y >= -1));
         case 3:
-            return !((players[0].x - x <= 1 && players[0].x - x >= -1 &&
-                players[0].y - y <= 1 && players[0].y - y >= -1) ||
-                (players[1].x - x <= 1 && players[1].x - x >= -1 &&
-                    players[1].y - y <= 1 && players[1].y - y >= -1) ||
-                (players[2].x - x <= 1 && players[2].x - x >= -1 &&
-                    players[2].y - y <= 1 && players[2].y - y >= -1));
+            return !((players[0].x - x <= 1 &&
+                players[0].x - x >= -1 &&
+                players[0].y - y <= 1 &&
+                players[0].y - y >= -1) ||
+                (players[1].x - x <= 1 &&
+                    players[1].x - x >= -1 &&
+                    players[1].y - y <= 1 &&
+                    players[1].y - y >= -1) ||
+                (players[2].x - x <= 1 &&
+                    players[2].x - x >= -1 &&
+                    players[2].y - y <= 1 &&
+                    players[2].y - y >= -1));
         case 4:
-            return !((players[0].x - x <= 1 && players[0].x - x >= -1 &&
-                players[0].y - y <= 1 && players[0].y - y >= -1) ||
-                (players[1].x - x <= 1 && players[1].x - x >= -1 &&
-                    players[1].y - y <= 1 && players[1].y - y >= -1) ||
-                (players[2].x - x <= 1 && players[2].x - x >= -1 &&
-                    players[2].y - y <= 1 && players[2].y - y >= -1) ||
-                (players[3].x - x <= 1 && players[3].x - x >= -1 &&
-                    players[3].y - y <= 1 && players[3].y - y >= -1));
+            return !((players[0].x - x <= 1 &&
+                players[0].x - x >= -1 &&
+                players[0].y - y <= 1 &&
+                players[0].y - y >= -1) ||
+                (players[1].x - x <= 1 &&
+                    players[1].x - x >= -1 &&
+                    players[1].y - y <= 1 &&
+                    players[1].y - y >= -1) ||
+                (players[2].x - x <= 1 &&
+                    players[2].x - x >= -1 &&
+                    players[2].y - y <= 1 &&
+                    players[2].y - y >= -1) ||
+                (players[3].x - x <= 1 &&
+                    players[3].x - x >= -1 &&
+                    players[3].y - y <= 1 &&
+                    players[3].y - y >= -1));
         default:
             return false;
             break;
@@ -391,12 +480,13 @@ function nextTurn() {
         playerTurn = 1;
     }
     // console.log("new next turn: " + playerTurn) //log: turn after update
-    updateContent();
+    updateContent(playerTurn, scores);
     console.log(playerTurn);
     checkEndStates();
 }
-function updateContent() {
-    //TODO: update content
+function updateContent(turnOfPlayer, currentScores) {
+    contentHandler.update("currentPlayer", turnOfPlayer + "");
+    currentScores.forEach((score, player) => contentHandler.update(`scorePlayer${player + 1}`, score + ""));
 }
 //menu
 //players
@@ -428,13 +518,14 @@ function setDifficulty(num) {
 }
 //end cards
 function checkEndStates() {
+    console.log(availableCells, bombs, bombsExploded);
     if (availableCells <= bombs - bombsExploded || availableCells === 0) {
-        var winPlayer = scores.indexOf(Math.max.apply(Math, scores));
+        let winPlayer = scores.indexOf(Math.max(...scores)) + 1;
         showEndCard(winPlayer);
     }
 }
 function showEndCard(num) {
-    $("#winmessage").html("Speler " + num + " heeft gewonnen");
-    $("#winimg").attr("src", "./playericons/speler" + num + ".png");
+    $("#winmessage").html(`Speler ${num} heeft gewonnen`);
+    $("#winimg").attr("src", `./playericons/speler${num}.png`);
     $(".endCardWrapper").show();
 }
