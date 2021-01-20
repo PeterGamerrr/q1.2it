@@ -88,27 +88,71 @@ main .gameboard {
 }
 
 main .gameboard .cell {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   background: rgba(0, 0, 0, 0.7);
   width: auto;
   height: auto;
   overflow: hidden;
-  justify-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transition: all 150ms ease-out;
+  transition: all 150ms ease-out;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+}
+
+main .gameboard .cell:hover {
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
+  opacity: 0.8;
+  cursor: pointer;
 }
 
 main .gameboard .cell[c="1"] {
   background-color: magenta;
 }
 
+main .gameboard .cell[c="1"]:hover {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  opacity: 1;
+}
+
 main .gameboard .cell[c="2"] {
   background-color: orange;
+}
+
+main .gameboard .cell[c="2"]:hover {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  opacity: 1;
 }
 
 main .gameboard .cell[c="3"] {
   background-color: lightgreen;
 }
 
+main .gameboard .cell[c="3"]:hover {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  opacity: 1;
+}
+
 main .gameboard .cell[c="4"] {
   background-color: lightblue;
+}
+
+main .gameboard .cell[c="4"]:hover {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  opacity: 1;
 }
 
 div.bg-image {
@@ -127,6 +171,18 @@ img.playerIcon {
   max-height: 50px;
   padding: auto;
   margin: auto;
+  pointer-events: none;
+}
+
+img.exploded {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  z-index: 10;
 }
 
 .endCardWrapper {

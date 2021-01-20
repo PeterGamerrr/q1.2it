@@ -25,7 +25,6 @@ main {
     border-radius: 4rem;
     font-size: 1.2rem;
     width: 100%;
-    
   }
   div.row {
     padding: 1rem 0;
@@ -80,56 +79,83 @@ main {
     justify-content: auto;
 
     .cell {
+      position: relative;
+      display: flex;
       background: $black-70;
       width: auto;
       height: auto;
       overflow: hidden;
-      justify-items: center;
+      justify-content: center;
+      align-items: center;
+      transition: all 150ms ease-out;
+      transform: scale(1);
+
+      &:hover {
+        transform: scale(1.05);
+        opacity: 0.8;
+        cursor: pointer;
+      }
 
       &[c="1"] {
         background-color: $firstPlayerColor;
+        &:hover {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
 
       &[c="2"] {
         background-color: $secondPlayerColor;
+        &:hover {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
 
       &[c="3"] {
         background-color: $thirthPlayerColor;
+        &:hover {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
 
       &[c="4"] {
         background-color: $fourthPlayerColor;
+        &:hover {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
     }
 
     // .player1 {
-    //   background-color: rgb(148, 3, 148) !important; 
+    //   background-color: rgb(148, 3, 148) !important;
     //   background-image: url("../playericons/speler1.png") !important;
     //   background-size: auto;
     //   background-repeat: no-repeat;
     // }
-    
+
     // .player2 {
     //   background-color: rgb(168, 110, 2) !important;
     //   background-image: url("../playericons/speler2.png") !important;
     //   background-size: auto;
     //   background-repeat: no-repeat;
     // }
-    
+
     // .player3 {
     //   background-color: rgb(51, 136, 51) !important;
     //   background-image: url("../playericons/speler3.png") !important;
     //   background-size: auto;
     //   background-repeat: no-repeat;
     // }
-    
+
     // .player4 {
     //   background-color: rgb(35, 106, 129) !important;
     //   background-image: url("../playericons/speler4.png") !important;
     //   background-size: auto;
     //   background-repeat: no-repeat;
-    // } 
+    // }
   }
 }
 
@@ -149,26 +175,37 @@ img.playerIcon {
   max-height: 50px;
   padding: auto;
   margin: auto;
+  pointer-events: none;
+}
+
+img.exploded {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 10;
 }
 
 .endCardWrapper {
   position: fixed;
-  top:0;
+  top: 0;
   left: 0;
   background: $black-70;
   width: 100vw;
   height: 100vh;
   text-align: center;
   .endCard {
-      padding: 20px;
-      background: $white;
-      border-radius: 15px;
+    padding: 20px;
+    background: $white;
+    border-radius: 15px;
 
-      .confetti{
-          background: url("../images/win.gif");
-          padding: 2rem;
-          margin: 3rem 0;
-      }
+    .confetti {
+      background: url("../images/win.gif");
+      padding: 2rem;
+      margin: 3rem 0;
+    }
   }
 }
 
