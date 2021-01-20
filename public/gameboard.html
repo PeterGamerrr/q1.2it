@@ -1,10 +1,10 @@
-<div class="container" onmouseover="printCurrentPlayer(currentPlayer),printScorePLayerOne(scorePlayerOne)">
+<div class="container">
   <div class="row">
     <div class="col-12">
       <h1 class="header">Colomb</h1>
     </div>
     <div class="col-12">
-      <h3>Speler <span id="currentPlayer"></span> is aan de beurt</h3>
+      <h3>Speler <span data-for="currentPlayer"></span> is aan de beurt</h3>
     </div>
   </div>
   <div class="row">
@@ -12,33 +12,33 @@
       <h3 class="sideboardTitle">Score</h3>
 
       <p class="firstPlayer">Speler 1:</p>
-      <p><span id="scorePlayerOne"></span> punt(en)</p>
+      <p><span data-for="scorePlayer1"></span> punt(en)</p>
 
       <p class="secondPlayer">Speler 2:</p>
-      <p>{second player Score} punt(en)</p>
+      <p><span data-for="scorePlayer2"></span> punt(en)</p>
 
       <p class="thirthPlayer">Speler 3:</p>
-      <p>{thirth player Score} punt(en)</p>
+      <p><span data-for="scorePlayer3"></span> punt(en)</p>
 
       <p class="fourthPlayer">Speler 4:</p>
-      <p>{fourth player Score} punt(en)</p>
+      <p><span data-for="scorePlayer4"></span> punt(en)</p>
     </div>
     <div class="col-6 gameboard"></div>
     <div class="col-3 sideboard">
       <h3 class="sideboardTitle">Bommen</h3>
 
       <p>Live bommen:</p>
-      <p>{currentAmountOfBombs}</p>
+      <p data-for="currentAmountOfBombs"></p>
 
       <p>Ontploft:</p>
-      <p>{bombsThatDidBoom}</p>
+      <p data-for="bombsThatDidBoom"></p>
     </div>
   </div>
 </div>
 <div class="fluid-container endCardWrapper d-flex align-items-center justify-content-center" style="display: none !important;">
   <div class="col-8 endCard">
       <h1>We hebben een winnaar!</h1>
-      <p id="winmessage">Speler {number} heeft gewonnen</p>
+      <p id="winmessage">Speler <span data-for="winningPlayer"></span> heeft gewonnen</p>
       <div class="confetti">
           <img id="winimg" src="./playericons/speler1.png">
       </div>
@@ -49,15 +49,3 @@
       </div>
   </div>
 </div>
-
-
-<script>
-  function printCurrentPlayer(id) {
-    id.innerHTML = playerTurn;
-  }
-
-  function printScorePlayerOne(id) {
-    id.innerHTML = score[3];
-  }
-  
-  </script>
